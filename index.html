@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renshi Holistic Massage - Super App Wellness</title>
+    <meta name="description" content="Aplikasi layanan kesehatan holistik: Pijat, Reiki, Herbal, dan Edukasi di Surabaya Barat.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- HTML2Canvas untuk fitur Download Gambar Invoice -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gojek-green': '#00AA13',
+                        'gojek-dark': '#00880f',
+                        'gojek-black': '#1c1c1c',
+                        'reiki-gold': '#D4AF37',
+                        'app-gray': '#F9FAFB',
+                        'app-border': '#E5E7EB',
+                        'health-red': '#E11D48',
+                        'health-blue': '#0EA5E9',
+                        'relax-purple': '#8B5CF6',
+                        'acu-teal': '#14B8A6'
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        heading: ['"Poppins"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'app': '0 1px 6px rgba(0,0,0,0.08)',
+                        'app-hover': '0 4px 12px rgba(0,0,0,0.12)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'sound-wave': 'wave 1s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        wave: {
+                            '0%, 100%': { height: '10%' },
+                            '50%': { height: '100%' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #ffffff; color: #1c1c1c; -webkit-tap-highlight-color: transparent; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Card Selection Logic */
+        .service-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; }
+        .service-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        .service-card.selected-green { border-color: #00AA13; background-color: #F0FFF4; position: relative; }
+        .service-card.selected-green::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: -10px; right: -10px; background: #00AA13; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 2px solid white; }
+
+        .service-card.selected-gold { border-color: #D4AF37; background-color: #FFFDF0; position: relative; }
+        .service-card.selected-gold::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: -10px; right: -10px; background: #D4AF37; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 2px solid white; }
+
+        /* Menu Buttons */
+        .menu-btn.active div { background-color: #e8fceb; color: #00AA13; border: 2px solid #00AA13; }
+        .menu-btn.active span { font-weight: 700; color: #00AA13; }
+        
+        /* Custom Active Colors */
+        .menu-btn.active#btn-reiki-massage div { background-color: #FFFDF0; color: #D4AF37; border-color: #D4AF37; }
+        .menu-btn.active#btn-reiki-massage span { color: #D4AF37; }
+        .menu-btn.active#btn-herbal div { background-color: #fff7ed; color: #ea580c; border-color: #ea580c; }
+        .menu-btn.active#btn-herbal span { color: #ea580c; }
+        .menu-btn.active#btn-kelas div { background-color: #eff6ff; color: #2563eb; border-color: #2563eb; }
+        .menu-btn.active#btn-kelas span { color: #2563eb; }
+        .menu-btn.active#btn-health div { background-color: #f0f9ff; color: #0EA5E9; border-color: #0EA5E9; }
+        .menu-btn.active#btn-health span { color: #0EA5E9; }
+        /* Relax & Acu Active Colors */
+        .menu-btn.active#btn-relax div { background-color: #F5F3FF; color: #8B5CF6; border-color: #8B5CF6; }
+        .menu-btn.active#btn-relax span { color: #8B5CF6; }
+        .menu-btn.active#btn-acupressure div { background-color: #F0FDFA; color: #14B8A6; border-color: #14B8A6; }
+        .menu-btn.active#btn-acupressure span { color: #14B8A6; }
+
+        /* Modern Compact Input */
+        .input-group { position: relative; }
+        .input-icon { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); color: #9CA3AF; font-size: 14px; }
+        .app-input { width: 100%; padding: 10px 12px 10px 36px; background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; font-size: 13px; transition: all 0.3s; outline: none; color: #374151; }
+        .app-input:focus { background-color: #fff; border-color: #00AA13; box-shadow: 0 0 0 3px rgba(0, 170, 19, 0.1); }
+        .app-range { width: 100%; height: 6px; background: #e5e7eb; border-radius: 5px; outline: none; -webkit-appearance: none; }
+        .app-range::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #0EA5E9; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* Animation */
+        #info-drawer { transition: transform 0.3s ease-in-out; }
+        .drawer-open { transform: translateX(0) !important; }
+        .drawer-closed { transform: translateX(100%); }
+        
+        #product-modal { transition: opacity 0.3s ease; }
+        #product-modal.hidden { opacity: 0; pointer-events: none; }
+        #product-modal.flex { opacity: 1; pointer-events: auto; }
+
+        .modal-transition { transition: opacity 0.3s ease; }
+        .modal-hidden { opacity: 0; pointer-events: none; }
+        .modal-visible { opacity: 1; pointer-events: auto; }
+
+        /* Fade In */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+
+        /* Breathing Animation */
+        .breathing-container { position: relative; width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+        .breath-circle { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: #E0F2FE; opacity: 0.5; transform: scale(0.8); }
+        .breath-text { position: relative; z-index: 10; font-weight: bold; color: #0284C7; font-size: 18px; }
+        .inhale .breath-circle { animation: grow 4s ease-in-out forwards; }
+        .hold .breath-circle { transform: scale(1.2); background: #BAE6FD; transition: background 0.5s; }
+        .exhale .breath-circle { animation: shrink 8s ease-in-out forwards; }
+        @keyframes grow { from { transform: scale(0.8); background: #E0F2FE; } to { transform: scale(1.2); background: #BAE6FD; } }
+        @keyframes shrink { from { transform: scale(1.2); background: #BAE6FD; } to { transform: scale(0.8); background: #E0F2FE; } }
+
+        /* Audio Visualizer Bars */
+        .visualizer-bar { width: 4px; background-color: #fff; border-radius: 2px; }
+        .playing .visualizer-bar { animation: wave 1s ease-in-out infinite; }
+        .playing .visualizer-bar:nth-child(1) { animation-duration: 0.8s; }
+        .playing .visualizer-bar:nth-child(2) { animation-duration: 1.1s; }
+        .playing .visualizer-bar:nth-child(3) { animation-duration: 0.9s; }
+        .playing .visualizer-bar:nth-child(4) { animation-duration: 1.2s; }
+        .playing .visualizer-bar:nth-child(5) { animation-duration: 0.7s; }
+
+    </style>
+</head>
+<body class="antialiased pb-24 md:pb-0 bg-gray-50">
+
+    <!-- 1. DRAWER INFO -->
+    <div id="info-overlay" onclick="toggleDrawer()" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity"></div>
+    <div id="info-drawer" class="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white z-[70] shadow-2xl drawer-closed overflow-y-auto p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-heading font-bold text-xl">Informasi Layanan</h3>
+            <button onclick="toggleDrawer()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div class="space-y-6">
+            <!-- INFO RENSHI HOLISTIC MASSAGE -->
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 p-4 rounded-xl shadow-sm">
+                <h4 class="font-heading font-bold text-gojek-green flex items-center gap-2 mb-2"><i class="fas fa-spa"></i> RENSHI HOLISTIC MASSAGE</h4>
+                <p class="text-xs text-gray-700 leading-relaxed text-justify italic">"Sebuah pusat terapi pijat yang dikelola oleh para ahli (Master/Renshi) bersertifikat, yang mendedikasikan diri untuk memberikan penyembuhan berkualitas tinggi secara menyeluruh (Holistik)—memulihkan fisik dari keletihan, menenangkan pikiran dari stres, dan menyeimbangkan kembali energi kehidupan pasien."</p>
+            </div>
+
+            <div class="border-b border-gray-100 pb-4">
+                <h4 class="font-bold text-indigo-700 flex items-center gap-2 mb-2"><i class="fas fa-hand-sparkles"></i> Terapi Reiki</h4>
+                <p class="text-sm text-gray-600 leading-relaxed text-justify">Terapi penyaluran energi alam semesta murni tanpa pijatan fisik. Fokus pada penyeimbangan chakra, pembersihan aura, dan penyembuhan mental (stres, trauma, anxiety) serta pemulihan organ dalam. Bisa dilakukan jarak jauh.</p>
+            </div>
+            <div class="border-b border-gray-100 pb-4">
+                <h4 class="font-bold text-reiki-gold flex items-center gap-2 mb-2"><i class="fas fa-crown"></i> Reiki Massage</h4>
+                <p class="text-sm text-gray-600 leading-relaxed text-justify">Kombinasi eksklusif teknik pijat relaksasi dan penyaluran energi Reiki. Manfaat ganda: otot rileks & pikiran tenang. Layanan premium.</p>
+            </div>
+            <div class="border-b border-gray-100 pb-4">
+                <h4 class="font-bold text-blue-600 flex items-center gap-2 mb-2"><i class="fas fa-users"></i> Kelas Gratis</h4>
+                <p class="text-sm text-gray-600 leading-relaxed text-justify">Edukasi penyembuhan mandiri untuk masyarakat. Pelajari teknik dasar pernapasan dan meditasi energi.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. PRODUCT MODAL -->
+    <div id="product-modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl transform transition-all scale-100">
+            <div class="relative h-56 bg-gray-200">
+                <img id="modal-img" src="" alt="Product" class="w-full h-full object-cover">
+                <button onclick="closeProductModal()" class="absolute top-4 right-4 bg-white/80 text-black w-8 h-8 rounded-full flex items-center justify-center hover:bg-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 id="modal-title" class="text-2xl font-heading font-bold text-gray-800">Nama Produk</h3>
+                    <span id="modal-price" class="text-xl font-bold text-gojek-green">Rp 0</span>
+                </div>
+                <div class="h-1 w-20 bg-orange-500 rounded-full mb-4"></div>
+                <div class="max-h-40 overflow-y-auto mb-6 pr-2">
+                    <p id="modal-desc" class="text-gray-600 text-sm leading-relaxed text-justify">Deskripsi lengkap...</p>
+                </div>
+                <a id="modal-link" href="#" target="_blank" class="block w-full bg-gojek-green text-white font-bold text-center py-3.5 rounded-xl shadow-lg hover:bg-gojek-dark transition active:scale-95">
+                    <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. [NEW] INVOICE MODAL -->
+    <div id="invoice-modal" class="fixed inset-0 z-[90] modal-hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm modal-transition flex">
+        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
+            
+            <!-- Area Render Invoice (Bisa didownload sbg gambar) -->
+            <div id="invoice-content" class="p-6 bg-white w-full overflow-y-auto relative">
+                <!-- Watermark -->
+                <div class="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none">
+                    <i class="fas fa-spa text-9xl"></i>
+                </div>
+
+                <!-- Header Invoice -->
+                <div class="text-center mb-5 relative z-10">
+                    <h2 class="font-heading font-bold text-2xl text-gojek-black tracking-tight">RENSHI HOLISTIC</h2>
+                    <p class="text-[11px] text-gray-500">Pusat Terapi Holistik Surabaya Barat</p>
+                </div>
+                
+                <div class="border-t-2 border-dashed border-gray-300 my-4 relative z-10"></div>
+                
+                <div class="text-center mb-4 relative z-10">
+                    <span class="inline-block px-3 py-1 bg-green-50 text-gojek-green border border-green-200 rounded-full text-[10px] font-bold uppercase tracking-wider">E-Invoice Pemesanan</span>
+                </div>
+
+                <!-- Detail Customer -->
+                <div class="space-y-3 text-xs relative z-10">
+                    <div class="flex justify-between items-center"><span class="text-gray-500">No. Order</span> <span id="inv-no" class="font-bold text-gray-800"></span></div>
+                    <div class="flex justify-between items-center"><span class="text-gray-500">Tgl Pemesanan</span> <span id="inv-date" class="font-medium text-gray-800"></span></div>
+                    <div class="flex justify-between items-center"><span class="text-gray-500">Jadwal Terapis</span> <span id="inv-time" class="font-medium text-gray-800"></span></div>
+                    <div class="flex justify-between items-center"><span class="text-gray-500">Nama Pasien</span> <span id="inv-name" class="font-bold text-gray-800 text-right max-w-[150px] truncate"></span></div>
+                    <div class="flex justify-between items-start"><span class="text-gray-500">Lokasi/Alamat</span> <span id="inv-address" class="font-medium text-gray-800 text-right max-w-[180px] line-clamp-2"></span></div>
+                </div>
+
+                <div class="border-t-2 border-dashed border-gray-300 my-4 relative z-10"></div>
+                
+                <!-- Items Detail -->
+                <div class="mb-4 relative z-10">
+                    <span class="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-2">Rincian Layanan</span>
+                    <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
+                            <span id="inv-category" class="text-[10px] text-gojek-green font-bold"></span>
+                            <span id="inv-service" class="font-bold text-gray-800 text-sm max-w-[200px]"></span>
+                        </div>
+                        <span id="inv-price" class="text-sm text-gray-800 font-medium"></span>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-800 my-4 relative z-10"></div>
+
+                <!-- Total -->
+                <div class="flex justify-between items-center relative z-10">
+                    <span class="font-bold text-sm text-gray-800">TOTAL ESTIMASI</span>
+                    <span id="inv-total" class="font-bold text-xl text-gojek-green"></span>
+                </div>
+                
+                <div class="mt-8 text-center relative z-10">
+                    <p class="text-[9px] text-gray-400 italic">"Terima kasih telah mempercayakan kesehatan Anda. Terapis kami akan segera mengonfirmasi pesanan Anda via WhatsApp."</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons (Tidak masuk ke render gambar struk) -->
+            <div class="p-4 bg-gray-50 flex flex-col gap-3 border-t border-gray-200">
+                <button onclick="lanjutWA()" class="w-full bg-gojek-green text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-gojek-dark transition shadow-md">
+                    <i class="fab fa-whatsapp text-lg"></i> Kirim Invoice ke WA Admin
+                </button>
+                <div class="flex gap-2">
+                    <button onclick="downloadInvoice()" class="flex-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                        <i class="fas fa-download"></i> Simpan Gambar
+                    </button>
+                    <button onclick="closeInvoiceModal()" class="px-5 bg-red-50 text-red-500 hover:bg-red-100 font-bold rounded-xl transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <nav class="fixed w-full z-40 top-0 bg-white border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center max-w-4xl">
+            <a href="#" class="flex items-center gap-3">
+                <img src="https://www.dropbox.com/scl/fi/4phm4uerlh1le5hr9lo9x/1775233394802-2.png?rlkey=zu934v0nbklcjw8o9c14i09r2&st=o5rfjv1h&raw=1" alt="Logo" class="h-10 w-auto">
+                <div class="flex flex-col">
+                    <span class="font-heading font-bold text-lg text-gojek-black leading-tight">RENSHI HOLISTIC</span>
+                    <span class="text-[10px] text-gray-500 font-medium tracking-wide">Massage • Energy • Herbal</span>
+                </div>
+            </a>
+            <button onclick="toggleDrawer()" class="p-2 text-gray-700 hover:text-gojek-green transition"><i class="fas fa-bars text-2xl"></i></button>
+        </div>
+    </nav>
+
+    <!-- CONTENT WRAPPER -->
+    <div class="pt-20 max-w-4xl mx-auto bg-white min-h-screen shadow-2xl overflow-hidden">
+        
+        <!-- HERO SLIDER (UPDATED) -->
+        <section class="px-4 mt-4 mb-6">
+            <div class="w-full overflow-hidden rounded-2xl shadow-app relative">
+                <div id="hero-slider" class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-0 w-full scroll-smooth">
+                    <!-- Slide 1 -->
+                    <div class="min-w-full snap-center relative h-[220px] bg-gray-900">
+                        <img src="https://www.dropbox.com/scl/fi/q8rk2dkgolotush267s1d/Gemini_Generated_Image_emzctzemzctzemzc-2.png?rlkey=ejwk86ihn839g42z5w692rqh8&st=obyztx3i&raw=1" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="min-w-full snap-center relative h-[220px] bg-gray-900">
+                        <img src="https://www.dropbox.com/scl/fi/9qcs4sjt54zsl3lku8xkk/Gemini_Generated_Image_ljbq6yljbq6yljbq-2.png?rlkey=jupvhr086e3mogv6t4mt8o8ek&st=2ueflm0w&raw=1" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="min-w-full snap-center relative h-[220px] bg-gray-900">
+                        <img src="https://www.dropbox.com/scl/fi/brz4lp9h9anvml8ya2boh/Gemini_Generated_Image_5n1qzz5n1qzz5n1q-2.png?rlkey=7qjzniz7dz6s6qfnx8n1ddbt0&st=7fibty3j&raw=1" class="w-full h-full object-cover">
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="min-w-full snap-center relative h-[220px] bg-gray-900">
+                        <img src="https://www.dropbox.com/scl/fi/sgq3ehg0vp8pbemzuirob/Gemini_Generated_Image_u0y3jau0y3jau0y3-2.png?rlkey=6kie8i1t8c30uqt26ik10fcdw&st=9xs1w6eu&raw=1" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN MENU GRID (UPDATED 3x3) -->
+        <section class="px-6 mb-8">
+            <div class="grid grid-cols-3 gap-y-6 gap-x-4 text-center">
+                <!-- 1. Go Massage -->
+                <button onclick="switchTab('massage')" class="menu-btn active group flex flex-col items-center gap-2" id="btn-massage">
+                    <div class="w-14 h-14 rounded-2xl bg-green-50 text-gojek-green border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300"><i class="fas fa-hands-bubbles"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Go Massage</span>
+                </button>
+                <!-- 2. Reiki Massage -->
+                <button onclick="switchTab('reiki-massage')" class="menu-btn group flex flex-col items-center gap-2" id="btn-reiki-massage">
+                    <div class="w-14 h-14 rounded-2xl bg-yellow-50 text-reiki-gold border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300"><i class="fas fa-crown"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Reiki Massage</span>
+                </button>
+                <!-- 3. Terapi Reiki -->
+                <button onclick="switchTab('reiki')" class="menu-btn group flex flex-col items-center gap-2" id="btn-reiki">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300"><i class="fas fa-hand-sparkles"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Terapi Reiki</span>
+                </button>
+                <!-- 4. Cek Kesehatan -->
+                <button onclick="switchTab('health')" class="menu-btn group flex flex-col items-center gap-2" id="btn-health">
+                    <div class="w-14 h-14 rounded-2xl bg-sky-50 text-health-blue border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-sky-100"><i class="fas fa-heartbeat"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Cek Kesehatan</span>
+                </button>
+                <!-- 5. Zona Relaksasi (NEW) -->
+                <button onclick="switchTab('relax')" class="menu-btn group flex flex-col items-center gap-2" id="btn-relax">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-50 text-relax-purple border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-purple-100"><i class="fas fa-headphones-alt"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Zona Relaksasi</span>
+                </button>
+                <!-- 6. Pijat Mandiri (NEW) -->
+                <button onclick="switchTab('acupressure')" class="menu-btn group flex flex-col items-center gap-2" id="btn-acupressure">
+                    <div class="w-14 h-14 rounded-2xl bg-teal-50 text-acu-teal border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-teal-100"><i class="fas fa-fingerprint"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Pijat Mandiri</span>
+                </button>
+                <!-- 7. Go Herbal -->
+                <button onclick="switchTab('herbal')" class="menu-btn group flex flex-col items-center gap-2" id="btn-herbal">
+                    <div class="w-14 h-14 rounded-2xl bg-orange-50 text-orange-600 border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-orange-100"><i class="fas fa-leaf"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Go Herbal</span>
+                </button>
+                <!-- 8. Kelas Reiki -->
+                <button onclick="switchTab('kelas')" class="menu-btn group flex flex-col items-center gap-2" id="btn-kelas">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-blue-100"><i class="fas fa-users"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">Kelas Gratis</span>
+                </button>
+                 <!-- 9. CS Bantuan -->
+                 <a href="https://wa.me/62895394005555" target="_blank" class="menu-btn group flex flex-col items-center gap-2">
+                    <div class="w-14 h-14 rounded-2xl bg-gray-50 text-gray-600 border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-gray-100"><i class="fas fa-headset"></i></div>
+                    <span class="text-[11px] font-bold text-gray-700">CS Bantuan</span>
+                </a>
+            </div>
+        </section>
+        
+        <!-- DAILY HEALTH TIPS -->
+        <section class="px-4 mb-8">
+            <div id="daily-tip-container" class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 rounded-2xl p-4 shadow-sm animate-fade-in relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 text-teal-100/50 text-8xl transform rotate-12"><i class="fas fa-quote-right"></i></div>
+                <div class="flex items-start gap-3 relative z-10">
+                    <div class="bg-white p-2.5 rounded-xl text-teal-600 shadow-sm shrink-0">
+                        <i id="tip-icon" class="fas fa-calendar-check text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="font-heading font-bold text-sm text-teal-800">Tips Sehat Hari Ini</h3>
+                            <span id="tip-date" class="text-[10px] bg-white px-2 py-0.5 rounded-full text-teal-600 font-bold border border-teal-100"></span>
+                        </div>
+                        <p id="tip-content" class="text-xs text-gray-600 leading-relaxed italic">"..."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROMO SLIDER -->
+        <section class="px-4 mb-8">
+            <h2 class="font-heading font-bold text-lg mb-3 px-1">Promo & Layanan Spesial</h2>
+            <div class="overflow-hidden w-full relative">
+                <div class="flex gap-4 w-full overflow-x-auto hide-scrollbar pb-2 snap-x">
+                    <div class="min-w-[260px] snap-center bg-gradient-to-r from-gojek-green to-emerald-500 p-4 rounded-xl text-white shadow-lg flex justify-between items-center">
+                        <div><h3 class="font-bold text-base">Gratis Transport</h3><p class="text-[10px] opacity-90">Jarak Maks 10km</p></div>
+                        <i class="fas fa-motorcycle text-2xl opacity-60"></i>
+                    </div>
+                    <div class="min-w-[260px] snap-center bg-gradient-to-r from-indigo-500 to-purple-600 p-4 rounded-xl text-white shadow-lg flex justify-between items-center">
+                        <div><h3 class="font-bold text-base">Distance Healing</h3><p class="text-[10px] opacity-90">Bayar Seikhlasnya</p></div>
+                        <i class="fas fa-hand-holding-heart text-2xl opacity-60"></i>
+                    </div>
+                    <div class="min-w-[260px] snap-center bg-gradient-to-r from-orange-500 to-yellow-500 p-4 rounded-xl text-white shadow-lg flex justify-between items-center">
+                        <div><h3 class="font-bold text-base">Herbal Pilihan</h3><p class="text-[10px] opacity-90">Rekomendasi Terbaik</p></div>
+                        <i class="fas fa-leaf text-2xl opacity-60"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-100 my-2 mx-4">
+
+        <!-- ==================== DYNAMIC CONTENT AREA ==================== -->
+
+        <!-- TAB 1: GO MASSAGE -->
+        <div id="content-massage" class="tab-content block px-4 pb-4 fade-in">
+            <h2 class="font-heading text-xl font-bold mb-4 flex items-center gap-2 text-gray-800"><i class="fas fa-receipt text-gojek-green"></i> Layanan Go Massage</h2>
+            <div class="bg-blue-50 p-3 rounded-xl mb-6 flex items-center gap-3 border border-blue-100">
+                <div class="bg-white p-2 rounded-full text-blue-600 shadow-sm"><i class="fas fa-user-check"></i></div>
+                <div><p class="text-xs font-bold text-blue-800">Terapis Pria & Wanita Tersedia</p><p class="text-[10px] text-blue-600">Profesional & Berpengalaman</p></div>
+            </div>
+            <div class="flex flex-col gap-6">
+                <div class="space-y-4">
+                    <!-- Paket 1 -->
+                    <div onclick="selectService(this, '60 Menit', '100.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fas fa-running"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Express Recharge</h3>
+                                <p class="text-[11px] text-gray-500">60 Menit • Pijat Capek</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-gojek-green">Manfaat:</span> Meredakan ketegangan otot dengan cepat, cocok untuk atasi kelelahan ringan.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-gojek-black text-sm">100K</span>
+                            <button type="button" class="text-[10px] font-bold text-gojek-green mt-1">PILIH</button>
+                        </div>
+                    </div>
+                    <!-- Paket 2 -->
+                    <div onclick="selectService(this, '90 Menit', '150.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-lg"><i class="fas fa-spa"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Deep Relaxation</h3>
+                                <p class="text-[11px] text-gray-500">90 Menit • Paling Laris</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-gojek-green">Manfaat:</span> Melancarkan peredaran darah, meredakan stres, dan memberi relaksasi mendalam.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-gojek-black text-sm">150K</span>
+                            <button type="button" class="text-[10px] font-bold text-gojek-green mt-1">PILIH</button>
+                        </div>
+                    </div>
+                    <!-- Paket 3 -->
+                    <div onclick="selectService(this, '120 Menit', '200.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg"><i class="fas fa-battery-full"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Total Restoration</h3>
+                                <p class="text-[11px] text-gray-500">120 Menit • Full Body</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-gojek-green">Manfaat:</span> Pemulihan tubuh menyeluruh, melepas kekakuan otot kronis, dan kembalikan energi.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-gojek-black text-sm">200K</span>
+                            <button type="button" class="text-[10px] font-bold text-gojek-green mt-1">PILIH</button>
+                        </div>
+                    </div>
+                    <!-- Paket 4 -->
+                    <div onclick="selectService(this, 'Pijat + Bekam', '130.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between ring-1 ring-red-100">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-lg"><i class="fas fa-fire-alt"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Pijat & Bekam Kering</h3>
+                                <p class="text-[11px] text-gray-500">90 Menit • Buang Angin</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-gojek-green">Manfaat:</span> Mengeluarkan angin/toksin, mengatasi pegal linu berat, dan tingkatkan imun.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-gojek-black text-sm">170K</span>
+                            <button type="button" class="text-[10px] font-bold text-gojek-green mt-1">PILIH</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl shadow-app-hover border border-app-border p-5">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3"><h3 class="font-heading font-bold text-base">Detail Pesanan</h3><span class="selected-label text-[10px] font-bold bg-gray-100 text-gray-400 px-3 py-1 rounded-full">Pilih paket dulu</span></div>
+                    <form onsubmit="kirimPesan(event, 'Go Massage')" class="space-y-3">
+                        <input type="hidden" class="service_name"><input type="hidden" class="service_price">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group"><div class="input-icon"><i class="fas fa-calendar-alt"></i></div><input type="date" required class="app-input tanggal"></div>
+                            <div class="input-group"><div class="input-icon"><i class="fas fa-clock"></i></div><input type="time" required class="app-input jam"></div>
+                        </div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-user"></i></div><input type="text" placeholder="Nama Lengkap" required class="app-input nama"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fab fa-whatsapp"></i></div><input type="tel" placeholder="Nomor WhatsApp" required class="app-input whatsapp"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-map-marker-alt"></i></div><input type="text" placeholder="Alamat Lengkap" required class="app-input alamat"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-sticky-note"></i></div><input type="text" placeholder="Catatan (Opsional)" class="app-input keluhan"></div>
+                        <button type="submit" class="w-full bg-gojek-green text-white font-bold py-3 rounded-xl shadow-md text-sm hover:bg-gojek-dark transition">Pesan Sekarang</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: REIKI MASSAGE -->
+        <div id="content-reiki-massage" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-reiki-gold"><i class="fas fa-crown"></i> Reiki Massage Premium</h2>
+            <div class="bg-yellow-50 p-3 rounded-xl mb-6 flex items-center gap-3 border border-yellow-100">
+                <div class="bg-white p-2 rounded-full text-reiki-gold shadow-sm"><i class="fas fa-user-check"></i></div>
+                <div><p class="text-xs font-bold text-yellow-800">Terapis Pria & Wanita Tersedia</p><p class="text-[10px] text-yellow-600">Spesialis Energi Reiki</p></div>
+            </div>
+            <div class="flex flex-col gap-6">
+                <div class="space-y-4">
+                    <!-- Reiki 1 -->
+                    <div onclick="selectService(this, 'Reiki Massage 60 Menit', '150.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-yellow-100 text-reiki-gold flex items-center justify-center text-lg"><i class="fas fa-leaf"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Basic Healing</h3>
+                                <p class="text-[11px] text-gray-500">60 Menit • Relax</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-reiki-gold">Manfaat:</span> Penyelarasan energi dasar tubuh, menenangkan sistem saraf, dan relaksasi pikiran.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-reiki-gold text-sm">150K</span>
+                            <button type="button" class="text-[10px] font-bold text-gray-400 mt-1">PILIH</button>
+                        </div>
+                    </div>
+                    <!-- Reiki 2 -->
+                    <div onclick="selectService(this, 'Reiki Massage 90 Menit', '200.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-yellow-100 text-reiki-gold flex items-center justify-center text-lg"><i class="fas fa-yin-yang"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Deep Healing</h3>
+                                <p class="text-[11px] text-gray-500">90 Menit • Balance</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-reiki-gold">Manfaat:</span> Membersihkan sumbatan chakra, meredakan kecemasan, dan healing fisik-mental.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-reiki-gold text-sm">200K</span>
+                            <button type="button" class="text-[10px] font-bold text-gray-400 mt-1">PILIH</button>
+                        </div>
+                    </div>
+                    <!-- Reiki 3 -->
+                    <div onclick="selectService(this, 'Reiki Massage 120 Menit', '250.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-yellow-100 text-reiki-gold flex items-center justify-center text-lg"><i class="fas fa-gem"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Ultimate Healing</h3>
+                                <p class="text-[11px] text-gray-500">120 Menit • Restore</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-reiki-gold">Manfaat:</span> Detoks aura menyeluruh, pulih dari trauma/psikosomatis, serta peremajaan sel.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-reiki-gold text-sm">250K</span>
+                            <button type="button" class="text-[10px] font-bold text-gray-400 mt-1">PILIH</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl shadow-app-hover border border-yellow-200 p-5">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3"><h3 class="font-heading font-bold text-base text-reiki-gold">Detail Pesanan</h3><span class="selected-label text-[10px] font-bold bg-yellow-50 text-reiki-gold px-3 py-1 rounded-full">Pilih paket dulu</span></div>
+                    <form onsubmit="kirimPesan(event, 'Reiki Massage Premium')" class="space-y-3">
+                        <input type="hidden" class="service_name"><input type="hidden" class="service_price">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="input-group"><div class="input-icon"><i class="fas fa-calendar-alt"></i></div><input type="date" required class="app-input tanggal"></div>
+                            <div class="input-group"><div class="input-icon"><i class="fas fa-clock"></i></div><input type="time" required class="app-input jam"></div>
+                        </div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-user"></i></div><input type="text" placeholder="Nama Lengkap" required class="app-input nama"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fab fa-whatsapp"></i></div><input type="tel" placeholder="Nomor WhatsApp" required class="app-input whatsapp"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-map-marker-alt"></i></div><input type="text" placeholder="Alamat Lengkap" required class="app-input alamat"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-heartbeat"></i></div><input type="text" placeholder="Keluhan Utama" class="app-input keluhan"></div>
+                        <button type="submit" class="w-full bg-reiki-gold hover:bg-yellow-600 text-white font-bold py-3 rounded-xl shadow-md text-sm transition">Pesan Reiki Massage</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: TERAPI REIKI -->
+        <div id="content-reiki" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-indigo-700"><i class="fas fa-hand-sparkles"></i> Layanan Reiki Healing</h2>
+            <div class="bg-indigo-50 p-6 rounded-2xl mb-6 border border-indigo-100">
+                <h3 class="font-bold text-sm text-indigo-900 mb-3">Manfaat Mendalam Reiki</h3>
+                <ul class="space-y-3 text-xs text-indigo-800 text-justify">
+                    <li class="flex gap-2"><i class="fas fa-check-circle mt-0.5 text-indigo-500"></i><span><b>Holistik:</b> Bekerja pada level fisik, mental, dan spiritual sekaligus.</span></li>
+                    <li class="flex gap-2"><i class="fas fa-check-circle mt-0.5 text-indigo-500"></i><span><b>Detoks Energi:</b> Membuang energi negatif & sumbatan emosi.</span></li>
+                    <li class="flex gap-2"><i class="fas fa-check-circle mt-0.5 text-indigo-500"></i><span><b>Relaksasi:</b> Gelombang otak Alpha/Theta untuk perbaikan sel.</span></li>
+                </ul>
+            </div>
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden group">
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start"><div><span class="bg-white/20 text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Layanan Spesial</span><h3 class="font-heading font-bold text-xl mt-2">Distance Healing</h3><p class="text-xs text-indigo-100 mt-1">Terapi Reiki Jarak Jauh</p></div><i class="fas fa-wifi text-4xl opacity-50"></i></div>
+                    <div class="mt-6 bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20"><p class="text-xs italic mb-2">"Energi tak terbatas ruang & waktu."</p><div class="flex items-center gap-2 mt-3"><i class="fas fa-hand-holding-heart text-yellow-300"></i><span class="font-bold text-sm text-yellow-300">BAYAR SEIKHLASNYA</span></div></div>
+                    <button onclick="pesanReiki()" class="w-full mt-6 bg-white text-indigo-700 font-bold py-3 rounded-full shadow-md hover:bg-gray-50 transition flex justify-center items-center gap-2 text-sm"><i class="fab fa-whatsapp"></i> Daftar Sekarang</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: CEK KESEHATAN -->
+        <div id="content-health" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-health-blue"><i class="fas fa-user-md"></i> Alat Cek Kesehatan</h2>
+            <div class="space-y-6">
+                <!-- SYMPTOM MATCHER -->
+                <div class="bg-white p-5 rounded-2xl shadow-app border border-app-border">
+                    <h3 class="font-bold text-sm text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-stethoscope text-red-500"></i> Keluhan Apa Hari Ini?</h3>
+                    <div class="grid grid-cols-2 gap-2 mb-4">
+                        <button onclick="checkSymptom('pinggang')" class="p-2 border border-gray-200 rounded-xl text-xs hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition">Sakit Pinggang</button>
+                        <button onclick="checkSymptom('stress')" class="p-2 border border-gray-200 rounded-xl text-xs hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition">Stres / Cemas</button>
+                        <button onclick="checkSymptom('tidur')" class="p-2 border border-gray-200 rounded-xl text-xs hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition">Susah Tidur</button>
+                        <button onclick="checkSymptom('angin')" class="p-2 border border-gray-200 rounded-xl text-xs hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition">Masuk Angin</button>
+                    </div>
+                    <div id="symptom-result" class="hidden bg-gray-50 p-4 rounded-xl text-center border border-gray-200 animate-fade-in">
+                        <h4 id="symptom-title" class="font-bold text-gray-800 text-sm mb-1"></h4>
+                        <p id="symptom-desc" class="text-xs text-gray-500 mb-3"></p>
+                        <button onclick="switchTab('massage')" class="text-[10px] bg-gojek-green text-white px-4 py-2 rounded-full font-bold">Pesan Layanan</button>
+                    </div>
+                </div>
+                <!-- BMI & STRESS METER -->
+                <div class="bg-white p-5 rounded-2xl shadow-app border border-app-border">
+                    <h3 class="font-bold text-sm text-gray-800 mb-3 flex items-center gap-2"><i class="fas fa-calculator text-gojek-green"></i> Kalkulator Berat Ideal</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div><label class="text-[10px] text-gray-500 font-bold ml-1">BERAT (KG)</label><input type="number" id="input-bb" placeholder="60" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-800 focus:outline-none focus:border-gojek-green transition"></div>
+                        <div><label class="text-[10px] text-gray-500 font-bold ml-1">TINGGI (CM)</label><input type="number" id="input-tb" placeholder="170" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-800 focus:outline-none focus:border-gojek-green transition"></div>
+                    </div>
+                    <div id="bmi-result-area" class="bg-gray-100 rounded-xl p-4 text-center transition-all duration-300"><h3 id="bmi-value" class="text-2xl font-bold text-gray-400">0.0</h3><span id="bmi-category" class="inline-block px-3 py-1 rounded-full text-[10px] font-bold bg-gray-200 text-gray-500 mt-2">Menunggu Input...</span></div>
+                </div>
+                <!-- BREATHING CIRCLE -->
+                <div class="bg-white p-5 rounded-2xl shadow-app border border-app-border text-center overflow-hidden">
+                    <h3 class="font-bold text-sm text-gray-800 mb-4 flex items-center justify-center gap-2"><i class="fas fa-lungs text-sky-500"></i> Relaksasi Napas 4-7-8</h3>
+                    <div class="breathing-container mb-4" id="breath-box"><div class="breath-circle"></div><span id="breath-text" class="breath-text">SIAP</span></div>
+                    <button id="btn-breath" onclick="toggleBreathing()" class="bg-sky-500 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-sky-600 transition shadow-md w-full">Mulai Latihan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- [NEW] TAB 5: ZONA RELAKSASI -->
+        <div id="content-relax" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-relax-purple"><i class="fas fa-headphones-alt"></i> Zona Relaksasi Audio</h2>
+            
+            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 p-6 rounded-3xl text-white shadow-xl mb-6 relative overflow-hidden">
+                <!-- Visualizer -->
+                <div id="visualizer" class="flex justify-center items-end gap-1 h-12 mb-4 opacity-50">
+                    <div class="visualizer-bar h-full"></div><div class="visualizer-bar h-full"></div><div class="visualizer-bar h-full"></div><div class="visualizer-bar h-full"></div><div class="visualizer-bar h-full"></div>
+                </div>
+                
+                <div class="text-center relative z-10">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm">
+                        <i id="audio-main-icon" class="fas fa-music text-2xl"></i>
+                    </div>
+                    <h3 id="audio-title" class="font-heading font-bold text-xl">Pilih Audio Terapi</h3>
+                    <p id="audio-status" class="text-xs text-indigo-200 mt-1">Ketuk playlist di bawah untuk memutar</p>
+                </div>
+                
+                <!-- Hidden Audio Element -->
+                <audio id="audio-player" class="hidden" controls>
+                    <source src="" type="audio/mpeg">
+                    Browser Anda tidak mendukung audio.
+                </audio>
+            </div>
+
+            <!-- Playlist -->
+            <div class="space-y-3">
+                <div onclick="playAudio('hujan', 'Suara Hujan Tenang', 'https://www.dropbox.com/scl/fi/c6bzfvo18c4nqmktmdddc/Rainy-Night-in-Forest-Cabin-Deep-Sleep-Stress-Relief-Relaxing-Nature-Sounds.m4a?rlkey=3sky4cep4zhxq2qi8s63azoj1&st=dq5dgfsa&dl=1')" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:bg-purple-50 transition group">
+                    <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fas fa-cloud-rain"></i></div><div><h4 class="font-bold text-gray-800 text-sm">Hujan & Guntur Lembut</h4><p class="text-[10px] text-gray-500">Menenangkan Pikiran</p></div></div><div class="text-relax-purple opacity-0 group-hover:opacity-100"><i class="fas fa-play"></i></div>
+                </div>
+                <div onclick="playAudio('hutan', 'Suara Alam Hutan', 'https://www.dropbox.com/scl/fi/d46qx1ztkw0b00pou4ekd/Relaxing-Forest-Nature-Sounds-with-Calm-Music-_-Deep-Meditation-Stress-Relief.m4a?rlkey=bxso1q4ehn5x7uk0a6mqxw8s7&st=ijn2qskv&dl=1')" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:bg-purple-50 transition group">
+                    <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center"><i class="fas fa-tree"></i></div><div><h4 class="font-bold text-gray-800 text-sm">Hutan & Burung</h4><p class="text-[10px] text-gray-500">Koneksi Alam</p></div></div><div class="text-relax-purple opacity-0 group-hover:opacity-100"><i class="fas fa-play"></i></div>
+                </div>
+                <div onclick="playAudio('bowl', 'Tibetan Singing Bowl', 'https://www.dropbox.com/scl/fi/yn6inrc5mqbnpj6shyrsh/5-Minute-Meditation-Music-with-Earth-Resonance-Frequency-for-Deeper-Relaxation.m4a?rlkey=5aaoaeds4vg3njkw1rspmeaxj&st=3oo0mgym&dl=1')" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:bg-purple-50 transition group">
+                    <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center"><i class="fas fa-bullseye"></i></div><div><h4 class="font-bold text-gray-800 text-sm">Tibetan Bowl</h4><p class="text-[10px] text-gray-500">Meditasi Dalam</p></div></div><div class="text-relax-purple opacity-0 group-hover:opacity-100"><i class="fas fa-play"></i></div>
+                </div>
+                <div onclick="playAudio('ombak', 'Ombak Laut', 'https://cdn.pixabay.com/audio/2022/08/02/audio_884fe92c21.mp3')" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:bg-purple-50 transition group">
+                    <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center"><i class="fas fa-water"></i></div><div><h4 class="font-bold text-gray-800 text-sm">Deburan Ombak</h4><p class="text-[10px] text-gray-500">Relaksasi Total</p></div></div><div class="text-relax-purple opacity-0 group-hover:opacity-100"><i class="fas fa-play"></i></div>
+                </div>
+                <div onclick="playAudio('white', 'White Noise', 'https://www.dropbox.com/scl/fi/q9nclpc5mx9n6054clggr/5-Minute-Meditation-Music-with-Beautiful-Snowy-Landscape.m4a?rlkey=hdlmfqv4gqkye9oxgbf2d3a2n&st=nq137hji&dl=1')" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between cursor-pointer hover:bg-purple-50 transition group">
+                    <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center"><i class="fas fa-wind"></i></div><div><h4 class="font-bold text-gray-800 text-sm">White Noise</h4><p class="text-[10px] text-gray-500">Fokus & Tidur</p></div></div><div class="text-relax-purple opacity-0 group-hover:opacity-100"><i class="fas fa-play"></i></div>
+                </div>
+            </div>
+            <div class="mt-4 text-center"><button onclick="stopAudio()" class="text-xs text-red-500 font-bold border border-red-200 px-4 py-2 rounded-full hover:bg-red-50">Hentikan Audio</button></div>
+        </div>
+
+        <!-- [NEW] TAB 6: PIJAT MANDIRI (ACUPRESSURE) -->
+        <div id="content-acupressure" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-acu-teal"><i class="fas fa-fingerprint"></i> Panduan Pijat Mandiri</h2>
+            <p class="text-xs text-gray-500 mb-6">Pertolongan pertama berbasis titik meridian untuk keluhan ringan.</p>
+            
+            <div class="space-y-6">
+                <!-- Sakit Kepala -->
+                <div class="bg-white rounded-2xl shadow-app border border-app-border overflow-hidden">
+                    <div class="h-40 bg-gray-100 relative">
+                        <img src="https://www.dropbox.com/scl/fi/6a1nvb62921zsfk403vlm/1149c0a8-daf4-4f9b-a252-325eae2c5521.jpeg?rlkey=zrzrd0zzggli5txbn47ye7bwn&st=cfmh9av5&raw=1" class="w-full h-full object-cover opacity-90">
+                        <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full p-4"><h3 class="text-white font-bold text-base">Sakit Kepala & Migrain</h3></div>
+                        <div class="absolute top-2 right-2 bg-acu-teal text-white text-[10px] px-2 py-1 rounded-full font-bold">Titik LI4 (Hegu)</div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-gray-600 mb-3 text-justify">Titik ini terletak di punggung tangan, di antara pangkal ibu jari dan jari telunjuk.</p>
+                        <div class="bg-teal-50 p-3 rounded-xl border border-teal-100">
+                            <h4 class="font-bold text-xs text-teal-800 mb-2">Cara Memijat:</h4>
+                            <ul class="text-[11px] text-gray-600 space-y-1 list-disc pl-4">
+                                <li>Tekan titik dengan jempol tangan satunya.</li>
+                                <li>Pijat memutar selama 1-2 menit.</li>
+                                <li>Ulangi di tangan sebelahnya.</li>
+                                <li class="text-red-500 font-bold">Dilarang untuk ibu hamil!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mual -->
+                <div class="bg-white rounded-2xl shadow-app border border-app-border overflow-hidden">
+                    <div class="h-40 bg-gray-100 relative">
+                        <img src="https://www.dropbox.com/scl/fi/m4jxmn9v3gn9wtkjtl9u9/Acupressure-for-Nausea-and-Vomiting-2.jpeg?rlkey=ab63j4nkwhgzqpra4e8ojjitb&st=hrdstw3y&raw=1" class="w-full h-full object-cover opacity-90">
+                        <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full p-4"><h3 class="text-white font-bold text-base">Mual & Asam Lambung</h3></div>
+                        <div class="absolute top-2 right-2 bg-acu-teal text-white text-[10px] px-2 py-1 rounded-full font-bold">Titik P6 (Nei Guan)</div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-gray-600 mb-3 text-justify">Terletak di bagian dalam pergelangan tangan, sekitar 3 jari dari perbatasan telapak tangan.</p>
+                        <div class="bg-teal-50 p-3 rounded-xl border border-teal-100">
+                            <h4 class="font-bold text-xs text-teal-800 mb-2">Cara Memijat:</h4>
+                            <ul class="text-[11px] text-gray-600 space-y-1 list-disc pl-4">
+                                <li>Letakkan 3 jari di pergelangan tangan.</li>
+                                <li>Tekan titik di antara dua tendon besar.</li>
+                                <li>Tahan tekanan selama 2-3 menit saat mual.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insomnia -->
+                <div class="bg-white rounded-2xl shadow-app border border-app-border overflow-hidden">
+                    <div class="h-40 bg-gray-100 relative">
+                        <img src="https://www.dropbox.com/scl/fi/nz7cwxv7ux6qbhhxsx7e3/1770793367801.jpg?rlkey=qh3kbtbp48f2zzqh5rxkzw3im&st=k7m7vr3h&raw=1" class="w-full h-full object-cover opacity-90">
+                        <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full p-4"><h3 class="text-white font-bold text-base">Susah Tidur / Insomnia</h3></div>
+                        <div class="absolute top-2 right-2 bg-acu-teal text-white text-[10px] px-2 py-1 rounded-full font-bold">Titik HT7 (Shen Men)</div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-gray-600 mb-3 text-justify">Terletak di pergelangan tangan bagian dalam, lurus dengan jari kelingking.</p>
+                        <div class="bg-teal-50 p-3 rounded-xl border border-teal-100">
+                            <h4 class="font-bold text-xs text-teal-800 mb-2">Cara Memijat:</h4>
+                            <ul class="text-[11px] text-gray-600 space-y-1 list-disc pl-4">
+                                <li>Tekan lembut dengan jempol.</li>
+                                <li>Lakukan gerakan memutar halus.</li>
+                                <li>Lakukan sambil mengatur napas rileks.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Leher Kaku -->
+                 <div class="bg-white rounded-2xl shadow-app border border-app-border overflow-hidden">
+                    <div class="h-40 bg-gray-100 relative">
+                        <img src="https://www.dropbox.com/scl/fi/afg6ztwkum52kh3wfrpbo/1770793909707.jpg?rlkey=lg0hb5oc5jivrutk798oh3jcj&st=fqu08kil&raw=1" class="w-full h-full object-cover opacity-90">
+                        <div class="absolute bottom-0 left-0 bg-gradient-to-t from-black/70 to-transparent w-full p-4"><h3 class="text-white font-bold text-base">Leher Kaku & Tegang</h3></div>
+                        <div class="absolute top-2 right-2 bg-acu-teal text-white text-[10px] px-2 py-1 rounded-full font-bold">Titik GB20 (Feng Chi)</div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-xs text-gray-600 mb-3 text-justify">Terletak di belakang leher, di cekungan dasar tengkorak kiri dan kanan.</p>
+                        <div class="bg-teal-50 p-3 rounded-xl border border-teal-100">
+                            <h4 class="font-bold text-xs text-teal-800 mb-2">Cara Memijat:</h4>
+                            <ul class="text-[11px] text-gray-600 space-y-1 list-disc pl-4">
+                                <li>Gunakan kedua jempol untuk menekan ke atas.</li>
+                                <li>Sandarkan kepala ke belakang sedikit.</li>
+                                <li>Pijat selama 3 menit untuk merilis ketegangan.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: GO HERBAL -->
+        <div id="content-herbal" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-orange-700"><i class="fas fa-leaf"></i> Katalog Go Herbal</h2>
+            <div class="bg-orange-50 p-4 rounded-xl mb-6 text-xs text-orange-800 flex items-start gap-3"><i class="fas fa-info-circle mt-0.5"></i><p>Produk herbal pilihan. Klik produk untuk detail.</p></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div onclick="openProductModal('Cuka Apel dan Cuka Lemon', '33.000', 'Cuka Apel Cocok untuk menurunkan berat badan, penderita diabetes/pre-diabetes, dan perawatan kulit (jerawat). Cuka Nanas Cocok untuk penderita asam urat, pemulihan pasca cedera, dan membantu pencernaan setelah makan berat (daging).', 'https://www.dropbox.com/scl/fi/53qz1t4ku3d06m5knqzzv/Screenshot_2026-02-09-23-34-21-858_com.ss.android.ugc.trill-2.jpg?rlkey=55e012scfau14wovkfyfnbhu3&st=h6uz2rie&raw=1', 'https://vt.tokopedia.com/t/ZS9JBrmPUPUCK-ZLzP8/')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full cursor-pointer hover:border-orange-300 transition group"><div class="h-28 bg-gray-100 rounded-xl mb-3 overflow-hidden"><img src="https://www.dropbox.com/scl/fi/53qz1t4ku3d06m5knqzzv/Screenshot_2026-02-09-23-34-21-858_com.ss.android.ugc.trill-2.jpg?rlkey=55e012scfau14wovkfyfnbhu3&st=h6uz2rie&raw=1" class="w-full h-full object-cover group-hover:scale-110 transition"></div><h4 class="font-bold text-gray-800 text-xs">Cuka Apel dan Cuka Nanas</h4><p class="text-[10px] text-gray-500 mb-2 mt-1">Membantu Kesehatan Pencernaan</p><div class="mt-auto pt-2 border-t border-dashed border-gray-200"><span class="block font-bold text-gojek-green text-sm">Rp 33.000</span></div></div>
+                <div onclick="openProductModal('JSR Sakit Pingang', '35.000', 'Terbuat Dari Bahan Alami Untuk Membantu Proses Penyembuhan Masalah Ginjal, Dan  Sakit Pingang.', 'https://www.dropbox.com/scl/fi/9v0krbgc0obmcof8rtfvh/Screenshot_2026-02-11-14-38-23-907_com.ss.android.ugc.trill-edit.jpg?rlkey=oj02pq61pj3d6upfzmkk2r376&st=7l7cpp3r&raw=1', 'https://vt.tokopedia.com/t/ZS9JP5AKQr1JK-CL3cC/')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full cursor-pointer hover:border-orange-300 transition group"><div class="h-28 bg-gray-100 rounded-xl mb-3 overflow-hidden"><img src="https://www.dropbox.com/scl/fi/9v0krbgc0obmcof8rtfvh/Screenshot_2026-02-11-14-38-23-907_com.ss.android.ugc.trill-edit.jpg?rlkey=oj02pq61pj3d6upfzmkk2r376&st=7l7cpp3r&raw=1" class="w-full h-full object-cover group-hover:scale-110 transition"></div><h4 class="font-bold text-gray-800 text-xs">JSR Detoks Ginjal</h4><p class="text-[10px] text-gray-500 mb-2 mt-1">Mengatasi Masalah GINJAL dan Sakit PINGGANG</p><div class="mt-auto pt-2 border-t border-dashed border-gray-200"><span class="block font-bold text-gojek-green text-sm">Rp 35.000</span></div></div>
+                <div onclick="openProductModal('Herbal Kolesterol Alami', '37.000', 'Garam murni kaya mineral. Cocok untuk rendaman kaki (foot bath) guna membuang racun (detox).', 'https://www.dropbox.com/scl/fi/va51d5indthtse4am126v/Screenshot_2026-02-11-14-51-48-211_com.ss.android.ugc.trill-edit.jpg?rlkey=x51brib0mvhgt8l7q61db93oc&st=fem4euu5&raw=1', 'https://vt.tokopedia.com/t/ZS9JPubJpoJuv-CL9Yx/')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full cursor-pointer hover:border-orange-300 transition group"><div class="h-28 bg-gray-100 rounded-xl mb-3 overflow-hidden"><img src="https://www.dropbox.com/scl/fi/va51d5indthtse4am126v/Screenshot_2026-02-11-14-51-48-211_com.ss.android.ugc.trill-edit.jpg?rlkey=x51brib0mvhgt8l7q61db93oc&st=fem4euu5&raw=1" class="w-full h-full object-cover group-hover:scale-110 transition"></div><h4 class="font-bold text-gray-800 text-xs">Herbal Kolesterol Alami</h4><p class="text-[10px] text-gray-500 mb-2 mt-1">Membantu Menurunkan Kolestrol Tinggi</p><div class="mt-auto pt-2 border-t border-dashed border-gray-200"><span class="block font-bold text-gojek-green text-sm">Rp 37.000</span></div></div>
+                <div onclick="openProductModal('Lilin Aromaterapi', '50.000', 'Lilin soy wax alami dengan essential oil Lavender. Menciptakan suasana tenang di kamar tidur.', 'https://images.unsplash.com/photo-1615485925763-867862f80c66?auto=format&fit=crop&q=80&w=400', 'https://tokopedia.com')" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col h-full cursor-pointer hover:border-orange-300 transition group"><div class="h-28 bg-gray-100 rounded-xl mb-3 overflow-hidden"><img src="https://images.unsplash.com/photo-1615485925763-867862f80c66?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover group-hover:scale-110 transition"></div><h4 class="font-bold text-gray-800 text-xs">Lilin Aroma</h4><p class="text-[10px] text-gray-500 mb-2 mt-1">Wangi Lavender</p><div class="mt-auto pt-2 border-t border-dashed border-gray-200"><span class="block font-bold text-gojek-green text-sm">Rp 50.000</span></div></div>
+            </div>
+        </div>
+
+        <!-- TAB 8: KELAS REIKI -->
+        <div id="content-kelas" class="tab-content hidden px-4 pb-4 fade-in">
+            <h2 class="font-heading text-lg font-bold mb-4 flex items-center gap-2 text-blue-600"><i class="fas fa-users"></i> Kelas Reiki Gratis</h2>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-app border border-blue-100">
+                <div class="h-40 bg-blue-500 relative">
+                    <img src="https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60">
+                    <div class="absolute inset-0 flex items-center justify-center"><h3 class="text-white font-bold text-2xl drop-shadow-md">Self Healing</h3></div>
+                </div>
+                <div class="p-6">
+                    <p class="text-sm text-gray-600 mb-4 leading-relaxed text-justify">Bergabunglah dengan komunitas kami untuk mempelajari teknik dasar penyembuhan mandiri. Materi meliputi: Meditasi, Pernapasan, dan Pengenalan Chakra.</p>
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center text-xs text-gray-500"><i class="fas fa-check text-green-500 mr-2"></i> Gratis tanpa biaya</li>
+                        <li class="flex items-center text-xs text-gray-500"><i class="fas fa-check text-green-500 mr-2"></i> Grup Diskusi WA</li>
+                        <li class="flex items-center text-xs text-gray-500"><i class="fas fa-check text-green-500 mr-2"></i> Zoom Meeting Bulanan</li>
+                    </ul>
+                    <a href="https://chat.whatsapp.com/" target="_blank" class="block w-full bg-blue-600 text-white font-bold text-center py-3 rounded-xl hover:bg-blue-700 transition">Gabung Grup WhatsApp</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TESTIMONIALS -->
+        <section class="px-4 mb-16 pt-6 border-t border-gray-100">
+            <div class="flex justify-between items-end mb-4 px-1">
+                <h2 class="font-heading font-bold text-lg">Apa Kata Mereka?</h2>
+                <span class="text-[10px] text-gray-400">Geser untuk melihat</span>
+            </div>
+            <div class="flex overflow-x-auto pb-6 gap-4 hide-scrollbar snap-x">
+                <div class="min-w-[280px] bg-white p-5 rounded-2xl shadow-app border border-app-border snap-center flex flex-col h-full hover:shadow-lg transition">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="flex text-orange-400 text-[10px]"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <span class="text-[10px] text-gray-400">Kemarin</span>
+                    </div>
+                    <p class="text-xs text-gray-700 italic mb-4 leading-relaxed">"Reiki Massage 90 menit bikin badan enteng banget. Beda sama pijat biasa, ada sensasi hangat yang menenangkan pikiran."</p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs">R</div>
+                        <div><span class="text-xs font-bold block text-gray-800">Ibu Ratna</span><span class="text-[10px] text-gray-500">Citraland, Surabaya</span></div>
+                    </div>
+                </div>
+                <div class="min-w-[280px] bg-white p-5 rounded-2xl shadow-app border border-app-border snap-center flex flex-col h-full hover:shadow-lg transition">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="flex text-orange-400 text-[10px]"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <span class="text-[10px] text-gray-400">2 hari lalu</span>
+                    </div>
+                    <p class="text-xs text-gray-700 italic mb-4 leading-relaxed">"Bekam kering mantap, masuk angin bablas. Terapis sopan dan profesional, datang tepat waktu."</p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-xs">B</div>
+                        <div><span class="text-xs font-bold block text-gray-800">Pak Budi</span><span class="text-[10px] text-gray-500">Pakuwon Indah</span></div>
+                    </div>
+                </div>
+                 <div class="min-w-[280px] bg-white p-5 rounded-2xl shadow-app border border-app-border snap-center flex flex-col h-full hover:shadow-lg transition">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="flex text-orange-400 text-[10px]"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <span class="text-[10px] text-gray-400">2 minggu lalu</span>
+                    </div>
+                    <p class="text-xs text-gray-700 italic mb-4 leading-relaxed">"Kelas gratisnya sangat insightful. Sekarang saya rutin meditasi pagi dan badan terasa lebih segar."</p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs">A</div>
+                        <div><span class="text-xs font-bold block text-gray-800">Mas Andi</span><span class="text-[10px] text-gray-500">HR Muhammad</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-gray-200 py-10 pb-28 md:pb-10 mt-10">
+        <div class="container mx-auto px-4 max-w-4xl text-center md:text-left">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6"><div><h4 class="font-heading font-bold text-xl text-gojek-black">Renshi Holistic</h4><p class="text-sm text-gray-500 mt-2 max-w-xs">Partner kesehatan holistik terpercaya Anda di Surabaya Barat.</p></div><div class="flex gap-4"><a href="#" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-100 text-gray-600 hover:text-gojek-green transition"><i class="fab fa-instagram"></i></a><a href="https://wa.me/62895394005555" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-green-100 text-gray-600 hover:text-gojek-green transition"><i class="fab fa-whatsapp"></i></a></div></div>
+            <div class="border-t border-gray-100 mt-8 pt-8 text-center text-xs text-gray-400">&copy; 2024 Renshi Holistic Massage. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Hero Slider
+        const slider = document.getElementById('hero-slider');
+        setInterval(() => { if(slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) { slider.scrollTo({ top: 0, left: 0, behavior: 'smooth' }); } else { slider.scrollBy({ top: 0, left: 300, behavior: 'smooth' }); } }, 4000);
+
+        // Tab Switch Logic
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('block'));
+            
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const div = btn.querySelector('div');
+                // Reset Styling
+                if(btn.id === 'btn-reiki-massage') div.className = "w-14 h-14 rounded-2xl bg-yellow-50 text-reiki-gold border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300";
+                else if(btn.id === 'btn-herbal') div.className = "w-14 h-14 rounded-2xl bg-orange-50 text-orange-600 border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-orange-100";
+                else if(btn.id === 'btn-kelas') div.className = "w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-blue-100";
+                else if(btn.id === 'btn-health') div.className = "w-14 h-14 rounded-2xl bg-sky-50 text-health-blue border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-sky-100";
+                else if(btn.id === 'btn-relax') div.className = "w-14 h-14 rounded-2xl bg-purple-50 text-relax-purple border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-purple-100";
+                else if(btn.id === 'btn-acupressure') div.className = "w-14 h-14 rounded-2xl bg-teal-50 text-acu-teal border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300 hover:bg-teal-100";
+                else div.className = "w-14 h-14 rounded-2xl bg-green-50 text-gojek-green border-2 border-transparent flex items-center justify-center text-2xl shadow-sm transition-all duration-300";
+            });
+            
+            const content = document.getElementById('content-' + tabName);
+            if(content) { content.classList.remove('hidden'); content.classList.add('block'); content.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            
+            const btn = document.getElementById('btn-' + tabName);
+            if(btn) { btn.classList.add('active'); const div = btn.querySelector('div'); div.classList.remove('border-transparent'); }
+        }
+
+        // Service Selection
+        function selectService(element, name, price, type) {
+            const parent = element.parentElement.parentElement;
+            parent.querySelectorAll('.service-card').forEach(card => { card.classList.remove('selected-green', 'selected-gold'); });
+            element.classList.add(type === 'gold' ? 'selected-gold' : 'selected-green');
+            const formContainer = parent.parentElement.querySelector('form');
+            if(formContainer) {
+                formContainer.querySelector('.service_name').value = name;
+                formContainer.querySelector('.service_price').value = price;
+                const label = formContainer.parentElement.querySelector('.selected-label');
+                label.textContent = name;
+                label.className = `selected-label text-[10px] font-bold px-3 py-1 rounded-full animate-bounce ${type === 'gold' ? 'bg-yellow-100 text-reiki-gold' : 'bg-green-100 text-gojek-green'}`;
+                setTimeout(() => label.classList.remove('animate-bounce'), 1000);
+            }
+        }
+
+        // ==========================================
+        // FITUR INVOICE TERKIRIM LANGSUNG KE WA
+        // ==========================================
+        let currentOrderData = {}; 
+
+        function kirimPesan(e, category) {
+            e.preventDefault();
+            const form = e.target;
+            const service = form.querySelector('.service_name').value;
+            const price = form.querySelector('.service_price').value;
+            
+            if(!service) { 
+                alert("Mohon pilih paket layanan terlebih dahulu di atas."); 
+                return; 
+            }
+            
+            // Ambil data form
+            const nama = form.querySelector('.nama').value;
+            const tanggal = form.querySelector('.tanggal').value;
+            const jam = form.querySelector('.jam').value;
+            const wa = form.querySelector('.whatsapp').value;
+            const alamat = form.querySelector('.alamat').value;
+            const note = form.querySelector('.keluhan').value || '-';
+            
+            // Generate Order ID (Contoh: RHM-20240404-1234)
+            const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const orderId = `RHM-${dateStr}-${randomNum}`;
+
+            currentOrderData = { orderId, category, service, price, tanggal, jam, nama, wa, alamat, note };
+
+            // Render ke UI (Popup E-Invoice)
+            document.getElementById('inv-no').innerText = orderId;
+            document.getElementById('inv-date').innerText = tanggal;
+            document.getElementById('inv-time').innerText = jam;
+            document.getElementById('inv-name').innerText = nama;
+            document.getElementById('inv-address').innerText = alamat;
+            document.getElementById('inv-category').innerText = category;
+            document.getElementById('inv-service').innerText = service;
+            document.getElementById('inv-price').innerText = 'Rp ' + price;
+            document.getElementById('inv-total').innerText = 'Rp ' + price;
+
+            // Munculkan Modal Invoice
+            const modal = document.getElementById('invoice-modal');
+            modal.classList.remove('modal-hidden');
+            modal.classList.add('modal-visible');
+        }
+
+        function closeInvoiceModal() {
+            const modal = document.getElementById('invoice-modal');
+            modal.classList.remove('modal-visible');
+            modal.classList.add('modal-hidden');
+        }
+
+        function downloadInvoice() {
+            const invoiceElement = document.getElementById('invoice-content');
+            html2canvas(invoiceElement, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Invoice_${currentOrderData.orderId}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // FUNGSI UTAMA: MENGIRIM TEKS INVOICE KE WHATSAPP SANGAT RAPI
+        function lanjutWA() {
+            const d = currentOrderData;
+            
+            // Format pesan WhatsApp agar menyerupai struk/invoice asli
+            const waText = `==========================
+🧾 *E-INVOICE PEMESANAN*
+==========================
+*RENSHI HOLISTIC MASSAGE*
+No. Order : ${d.orderId}
+Tanggal   : ${d.tanggal}
+
+*👤 DATA PELANGGAN*
+Nama   : ${d.nama}
+No. WA : ${d.wa}
+Alamat : ${d.alamat}
+
+*📦 DETAIL LAYANAN*
+Kategori : ${d.category}
+Layanan  : ${d.service}
+Jadwal   : ${d.tanggal} pukul ${d.jam}
+Catatan  : ${d.note}
+
+*💰 TOTAL TAGIHAN*
+*Rp ${d.price}*
+==========================
+_Mohon konfirmasi ketersediaan jadwal untuk pesanan saya di atas. Terima kasih._`;
+
+            window.open(`https://wa.me/62895394005555?text=${encodeURIComponent(waText)}`, '_blank');
+        }
+
+        function pesanReiki() {
+            const message = `Halo, saya tertarik dengan layanan *Distance Healing (Reiki Jarak Jauh)* dengan sistem bayar seikhlasnya.%0A%0AMohon info prosedurnya. Terima kasih.`;
+            window.open(`https://wa.me/62895394005555?text=${message}`, '_blank');
+        }
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('info-drawer');
+            const overlay = document.getElementById('info-overlay');
+            if (drawer.classList.contains('drawer-closed')) { drawer.classList.remove('drawer-closed'); drawer.classList.add('drawer-open'); overlay.classList.remove('hidden'); } 
+            else { drawer.classList.remove('drawer-open'); drawer.classList.add('drawer-closed'); overlay.classList.add('hidden'); }
+        }
+
+        // PRODUCT MODAL LOGIC
+        function openProductModal(title, price, desc, img, link) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-price').innerText = "Rp " + price;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-img').src = img;
+            document.getElementById('modal-link').href = link;
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // ==========================================
+        // 1. BMI CALCULATOR
+        // ==========================================
+        const inputBB = document.getElementById('input-bb');
+        const inputTB = document.getElementById('input-tb');
+        const bmiValue = document.getElementById('bmi-value');
+        const bmiCategory = document.getElementById('bmi-category');
+        const bmiArea = document.getElementById('bmi-result-area');
+
+        function calculateBMI() {
+            const bb = parseFloat(inputBB.value);
+            const tb = parseFloat(inputTB.value) / 100;
+
+            if (bb > 0 && tb > 0) {
+                const bmi = (bb / (tb * tb)).toFixed(1);
+                bmiValue.innerText = bmi;
+                let category = '', colorClass = '', textColor = '', badgeColor = '';
+
+                if (bmi < 18.5) { category = 'Berat Kurang'; colorClass = 'bg-yellow-50 border border-yellow-200'; textColor = 'text-yellow-600'; badgeColor = 'bg-yellow-100 text-yellow-700'; }
+                else if (bmi >= 18.5 && bmi < 24.9) { category = 'Ideal / Normal'; colorClass = 'bg-green-50 border border-green-200'; textColor = 'text-green-600'; badgeColor = 'bg-green-100 text-green-700'; }
+                else if (bmi >= 25 && bmi < 29.9) { category = 'Kelebihan Berat'; colorClass = 'bg-orange-50 border border-orange-200'; textColor = 'text-orange-600'; badgeColor = 'bg-orange-100 text-orange-700'; }
+                else { category = 'Obesitas'; colorClass = 'bg-red-50 border border-red-200'; textColor = 'text-red-600'; badgeColor = 'bg-red-100 text-red-700'; }
+
+                bmiCategory.innerText = category;
+                bmiCategory.className = `inline-block px-4 py-1.5 rounded-full text-xs font-bold mt-2 transition-all ${badgeColor}`;
+                bmiValue.className = `text-3xl font-bold transition-all ${textColor}`;
+                bmiArea.className = `rounded-xl p-4 text-center transition-all duration-500 ${colorClass}`;
+            } else {
+                bmiValue.innerText = "0.0";
+                bmiCategory.innerText = "Menunggu Input...";
+                bmiArea.className = "bg-gray-100 rounded-xl p-4 text-center transition-all";
+                bmiValue.className = "text-2xl font-bold text-gray-400";
+            }
+        }
+        inputBB.addEventListener('input', calculateBMI);
+        inputTB.addEventListener('input', calculateBMI);
+
+        // ==========================================
+        // 2. DAILY HEALTH TIPS
+        // ==========================================
+        const tipsData = ["Minumlah segelas air hangat saat bangun tidur.", "Lakukan deep breathing saat stres.", "Ganti camilan manis dengan buah.", "Berjalan kaki 15 menit setiap hari.", "Hindari HP 30 menit sebelum tidur.", "Rendam kaki air garam hangat.", "Postur tegak bantu energi lancar.", "Tertawa tingkatkan imun.", "Kurangi gula untuk kulit sehat.", "Peregangan tiap 1 jam kerja."];
+        function loadDailyTip() {
+            const date = new Date();
+            const tipIndex = (date.getDate() - 1) % tipsData.length;
+            const options = { weekday: 'long', day: 'numeric', month: 'short' };
+            document.getElementById('tip-content').innerText = `"${tipsData[tipIndex]}"`;
+            document.getElementById('tip-date').innerText = date.toLocaleDateString('id-ID', options);
+        }
+        document.addEventListener('DOMContentLoaded', loadDailyTip);
+
+        // ==========================================
+        // 3. HEALTH FEATURES
+        // ==========================================
+        function checkSymptom(type) {
+            const resultBox = document.getElementById('symptom-result');
+            resultBox.classList.remove('hidden');
+            const data = {
+                'pinggang': { title: "Rekomendasi: Go Massage (Pijat & Bekam)", desc: "Pijat deep tissue efektif meredakan nyeri pinggang." },
+                'stress': { title: "Rekomendasi: Reiki Massage / Healing", desc: "Energi Reiki menenangkan gelombang otak." },
+                'tidur': { title: "Rekomendasi: Terapi Reiki + Teh Chamomile", desc: "Relaksasi energi membantu tidur nyenyak." },
+                'angin': { title: "Rekomendasi: Kerokan / Bekam", desc: "Teknik membuang 'angin' gejala flu ringan." }
+            };
+            document.getElementById('symptom-title').innerText = data[type].title;
+            document.getElementById('symptom-desc').innerText = data[type].desc;
+        }
+
+        // Breathing
+        let breathingInterval; let isBreathing = false;
+        function toggleBreathing() {
+            const btn = document.getElementById('btn-breath'); const box = document.getElementById('breath-box'); const text = document.getElementById('breath-text');
+            if (!isBreathing) { isBreathing = true; btn.innerText = "Berhenti"; btn.className = "bg-red-500 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-red-600 transition shadow-md w-full"; startBreathingCycle(box, text); } 
+            else { isBreathing = false; btn.innerText = "Mulai Latihan"; btn.className = "bg-sky-500 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-sky-600 transition shadow-md w-full"; clearInterval(breathingInterval); box.className = "breathing-container mb-4"; text.innerText = "SIAP"; }
+        }
+        function startBreathingCycle(box, text) {
+            const runCycle = () => {
+                box.className = "breathing-container mb-4"; text.innerText = "TARIK..."; box.classList.add('inhale');
+                setTimeout(() => { if(!isBreathing) return; text.innerText = "TAHAN..."; box.className = "breathing-container mb-4 hold"; setTimeout(() => { if(!isBreathing) return; text.innerText = "HEMBUSKAN..."; box.className = "breathing-container mb-4 exhale"; }, 7000); }, 4000);
+            };
+            runCycle(); breathingInterval = setInterval(runCycle, 19000);
+        }
+
+        // ==========================================
+        // 4. AUDIO PLAYER LOGIC (RELAXATION ZONE)
+        // ==========================================
+        const audioPlayer = document.getElementById('audio-player');
+        const visualizer = document.getElementById('visualizer');
+        const audioTitle = document.getElementById('audio-title');
+        const audioStatus = document.getElementById('audio-status');
+        const mainIcon = document.getElementById('audio-main-icon');
+
+        function playAudio(id, title, url) {
+            audioPlayer.src = url;
+            audioPlayer.play();
+            
+            visualizer.classList.add('playing');
+            visualizer.classList.remove('opacity-50');
+            audioTitle.innerText = title;
+            audioStatus.innerText = "Sedang Memutar...";
+            mainIcon.className = "fas fa-volume-up text-2xl animate-pulse";
+        }
+
+        function stopAudio() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            
+            visualizer.classList.remove('playing');
+            visualizer.classList.add('opacity-50');
+            audioTitle.innerText = "Pilih Audio Terapi";
+            audioStatus.innerText = "Audio Dihentikan";
+            mainIcon.className = "fas fa-music text-2xl";
+        }
+
+    </script>
+</body>
+                      </html>
