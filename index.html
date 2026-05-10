@@ -12,7 +12,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -99,9 +99,7 @@
         .input-icon { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); color: #9CA3AF; font-size: 14px; }
         .app-input { width: 100%; padding: 10px 12px 10px 36px; background-color: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px; font-size: 13px; transition: all 0.3s; outline: none; color: #374151; }
         .app-input:focus { background-color: #fff; border-color: #00AA13; box-shadow: 0 0 0 3px rgba(0, 170, 19, 0.1); }
-        .app-range { width: 100%; height: 6px; background: #e5e7eb; border-radius: 5px; outline: none; -webkit-appearance: none; }
-        .app-range::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #0EA5E9; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
+        
         /* Animasi Laci / Modal */
         #info-drawer { transition: transform 0.3s ease-in-out; }
         .drawer-open { transform: translateX(0) !important; }
@@ -138,6 +136,8 @@
         .playing .visualizer-bar:nth-child(4) { animation-duration: 1.2s; }
         .playing .visualizer-bar:nth-child(5) { animation-duration: 0.7s; }
 
+        /* Dot Divider for Invoice */
+        .invoice-divider { border-top: 2px dashed #e5e7eb; margin: 16px 0; }
     </style>
 </head>
 <body class="antialiased pb-24 md:pb-0 bg-gray-50">
@@ -194,76 +194,99 @@
         </div>
     </div>
 
-    <!-- 3. MODAL INVOICE -->
+    <!-- 3. MODAL INVOICE (DESAIN PROFESIONAL) -->
     <div id="invoice-modal" class="fixed inset-0 z-[90] modal-hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm modal-transition flex">
-        <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
+        <div class="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[95vh]" id="invoice-container">
             
-            <!-- Area Render Invoice -->
-            <div id="invoice-content" class="p-6 bg-white w-full overflow-y-auto relative">
+            <!-- Area Render Invoice (Bisa di-scroll) -->
+            <div id="invoice-content" class="p-8 bg-white w-full overflow-y-auto relative">
                 <!-- Watermark -->
-                <div class="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none">
-                    <i class="fas fa-spa text-9xl"></i>
+                <div class="absolute inset-0 opacity-[0.02] flex items-center justify-center pointer-events-none">
+                    <i class="fas fa-spa text-[250px]"></i>
                 </div>
 
-                <!-- Header Invoice -->
-                <div class="text-center mb-5 relative z-10">
-                    <h2 class="font-heading font-bold text-2xl text-gojek-black tracking-tight">RENSHI HOLISTIC</h2>
-                    <p class="text-[11px] text-gray-500">Pusat Terapi Holistik Surabaya Barat</p>
-                </div>
-                
-                <div class="border-t-2 border-dashed border-gray-300 my-4 relative z-10"></div>
-                
-                <div class="text-center mb-4 relative z-10">
-                    <span class="inline-block px-3 py-1 bg-green-50 text-gojek-green border border-green-200 rounded-full text-[10px] font-bold uppercase tracking-wider">E-Invoice Pemesanan</span>
-                </div>
-
-                <!-- Detail Pelanggan -->
-                <div class="space-y-3 text-xs relative z-10">
-                    <div class="flex justify-between items-center"><span class="text-gray-500">No. Order</span> <span id="inv-no" class="font-bold text-gray-800"></span></div>
-                    <div class="flex justify-between items-center"><span class="text-gray-500">Tanggal Pesan</span> <span id="inv-date" class="font-medium text-gray-800"></span></div>
-                    <div class="flex justify-between items-center"><span class="text-gray-500">Jadwal</span> <span id="inv-time" class="font-medium text-gray-800"></span></div>
-                    <div class="flex justify-between items-center"><span class="text-gray-500">Jenis Terapis</span> <span id="inv-therapist" class="font-bold text-gojek-green text-right max-w-[150px] truncate"></span></div>
-                    <div class="flex justify-between items-center"><span class="text-gray-500">Nama Pemesan</span> <span id="inv-name" class="font-bold text-gray-800 text-right max-w-[150px] truncate"></span></div>
-                    <div class="flex justify-between items-start"><span class="text-gray-500">Lokasi/Alamat</span> <span id="inv-address" class="font-medium text-gray-800 text-right max-w-[180px] line-clamp-2"></span></div>
-                </div>
-
-                <div class="border-t-2 border-dashed border-gray-300 my-4 relative z-10"></div>
-                
-                <!-- Detail Item -->
-                <div class="mb-4 relative z-10">
-                    <span class="text-[10px] text-gray-400 uppercase tracking-wider font-bold block mb-2">Rincian Layanan</span>
-                    <div class="flex justify-between items-start">
-                        <div class="flex flex-col pr-4">
-                            <span id="inv-category" class="text-[10px] text-gojek-green font-bold"></span>
-                            <span id="inv-service" class="font-bold text-gray-800 text-sm"></span>
-                        </div>
-                        <span id="inv-price" class="text-sm text-gray-800 font-medium whitespace-nowrap"></span>
+                <!-- Header Invoice Profesional -->
+                <div class="flex justify-between items-start mb-6 relative z-10">
+                    <div>
+                        <!-- Logo Teks -->
+                        <h2 class="font-heading font-black text-xl md:text-2xl text-gojek-black tracking-[0.1em] uppercase leading-tight">RENSHI<br>HOLISTIC</h2>
+                        <p class="text-[9px] text-gray-500 mt-1 uppercase tracking-widest font-bold">Holistic Wellness Center</p>
+                    </div>
+                    <div class="text-right">
+                        <h1 class="text-2xl md:text-3xl font-light tracking-widest text-gray-300 uppercase">Invoice</h1>
+                        <p class="text-xs font-bold text-gray-800 mt-1" id="inv-no">INV-000000</p>
                     </div>
                 </div>
 
-                <div class="border-t border-gray-800 my-4 relative z-10"></div>
+                <!-- Detail Tagihan & Jadwal -->
+                <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100 relative z-10">
+                    <div>
+                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold mb-1.5">Ditagihkan Kepada:</p>
+                        <p class="text-xs font-bold text-gray-800" id="inv-name"></p>
+                        <p class="text-[10px] text-gray-600 mt-0.5" id="inv-phone"></p>
+                        <p class="text-[10px] text-gray-600 mt-0.5 max-w-[150px]" id="inv-address"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold mb-1.5">Detail Pelaksanaan:</p>
+                        <p class="text-[10px] text-gray-500 mb-0.5">Tgl: <span class="text-xs font-bold text-gray-800" id="inv-date"></span></p>
+                        <p class="text-[10px] text-gray-500 mb-1">Jam: <span class="text-xs font-bold text-gray-800" id="inv-time"></span></p>
+                        <p class="text-[9px] text-gray-400 uppercase tracking-widest font-bold mt-2">Terapis:</p>
+                        <p class="text-[10px] font-bold text-gojek-green mt-0.5" id="inv-therapist"></p>
+                    </div>
+                </div>
 
-                <!-- Total -->
-                <div class="flex justify-between items-center relative z-10">
-                    <span class="font-bold text-sm text-gray-800">TOTAL ESTIMASI</span>
-                    <span id="inv-total" class="font-bold text-xl text-gojek-green"></span>
+                <div class="invoice-divider relative z-10"></div>
+                
+                <!-- Rincian Item Profesional (Tabel) -->
+                <div class="relative z-10 mb-6">
+                    <!-- Table Header -->
+                    <div class="bg-gray-800 text-white flex justify-between px-3 py-2 rounded-t-lg">
+                        <span class="text-[10px] font-bold uppercase tracking-widest w-2/3">Deskripsi Layanan</span>
+                        <span class="text-[10px] font-bold uppercase tracking-widest w-1/3 text-right">Harga</span>
+                    </div>
+                    <!-- Table Body (Item List) -->
+                    <div id="inv-item-list" class="border-x border-b border-gray-200 p-3 rounded-b-lg flex flex-col gap-3 bg-gray-50">
+                        <!-- Item dirender via JS -->
+                    </div>
+                </div>
+
+                <!-- Kotak Total -->
+                <div class="flex justify-end relative z-10">
+                    <div class="w-[80%] bg-green-50 p-4 rounded-xl border border-green-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-xs text-green-800 font-medium">Subtotal</span>
+                            <span class="text-xs text-green-800 font-bold" id="inv-subtotal"></span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs text-green-800 font-medium">Biaya Admin</span>
+                            <span class="text-xs text-green-800 font-bold">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center border-t border-green-200 pt-2 mt-1">
+                            <span class="text-sm font-black text-green-900 tracking-wide">TOTAL TAGIHAN</span>
+                            <span class="text-lg font-black text-gojek-green" id="inv-total"></span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="mt-8 text-center relative z-10">
-                    <p class="text-[9px] text-gray-400 italic">"Terima kasih telah mempercayakan kesehatan Anda. Terapis kami akan mengonfirmasi pesanan Anda segera melalui WhatsApp."</p>
+                <!-- Catatan Footer Invoice -->
+                <div class="mt-8 pt-5 border-t border-gray-200 text-center relative z-10">
+                    <div class="inline-block px-3 py-1 bg-orange-50 border border-orange-200 text-orange-600 rounded-md text-[10px] font-bold uppercase tracking-widest mb-3">
+                        Status: Belum Lunas (Bayar di Tempat)
+                    </div>
+                    <p class="text-[9px] text-gray-400 italic">"Terima kasih telah mempercayakan kesehatan Anda kepada kami. Konfirmasi kehadiran akan dilanjutkan via WhatsApp Admin."</p>
                 </div>
             </div>
 
-            <!-- Tombol Tindakan -->
-            <div class="p-4 bg-gray-50 flex flex-col gap-3 border-t border-gray-200">
+            <!-- Tombol Tindakan (Tidak masuk hasil download) -->
+            <div class="p-4 bg-white flex flex-col gap-3 border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] relative z-20">
                 <button onclick="lanjutWA()" class="w-full bg-gojek-green text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-gojek-dark transition shadow-md">
                     <i class="fab fa-whatsapp text-lg"></i> Kirim Invoice ke WA Admin
                 </button>
                 <div class="flex gap-2">
-                    <button onclick="downloadInvoice()" class="flex-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                    <button onclick="downloadInvoice()" class="flex-1 bg-gray-50 border border-gray-300 text-gray-700 hover:bg-gray-100 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-sm">
                         <i class="fas fa-download"></i> Simpan Gambar
                     </button>
-                    <button onclick="closeInvoiceModal()" class="px-5 bg-red-50 text-red-500 hover:bg-red-100 font-bold rounded-xl transition">
+                    <button onclick="closeInvoiceModal()" class="px-5 bg-red-50 text-red-500 hover:bg-red-100 font-bold rounded-xl transition border border-red-100">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -278,17 +301,17 @@
                 <img src="https://www.dropbox.com/scl/fi/4phm4uerlh1le5hr9lo9x/1775233394802-2.png?rlkey=zu934v0nbklcjw8o9c14i09r2&st=o5rfjv1h&raw=1" alt="Logo" class="h-10 w-auto bg-white/10 rounded-lg p-1">
                 <div class="flex flex-col">
                     <span class="font-heading font-bold text-lg text-white leading-tight">RENSHI HOLISTIC</span>
-                    <span class="text-[10px] text-gray-300 font-medium tracking-wide">Massage • Energy • Herbal</span>
+                    <span class="text-[10px] text-gray-300 font-medium tracking-wide">Relax • Restore • Rebalance</span>
                 </div>
             </a>
             <button onclick="toggleDrawer()" class="p-2 text-white hover:text-gojek-green transition"><i class="fas fa-bars text-2xl"></i></button>
         </div>
     </nav>
 
-    <!-- WRAPPER KONTEN (pt disesuaikan agar menempel dengan header) -->
+    <!-- WRAPPER KONTEN -->
     <div class="pt-[64px] max-w-4xl mx-auto bg-white min-h-screen shadow-2xl overflow-hidden pb-10">
         
-        <!-- SLIDER UTAMA (HERO) - Dibuat Full Width tanpa batas samping -->
+        <!-- SLIDER UTAMA (HERO) -->
         <section class="mb-6 w-full relative bg-gray-900">
             <div class="w-full overflow-hidden relative shadow-sm">
                 <div id="hero-slider" class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-0 w-full scroll-smooth">
@@ -419,7 +442,7 @@
                 <!-- Grup: Menu Utama -->
                 <div class="space-y-4">
                     <!-- Paket 1 -->
-                    <div onclick="selectService(this, '60 Menit', '100.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                    <div onclick="selectService(this, 'Express Recharge (60 Menit)', '100.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fas fa-running"></i></div>
                             <div>
@@ -434,7 +457,7 @@
                         </div>
                     </div>
                     <!-- Paket 2 -->
-                    <div onclick="selectService(this, '90 Menit', '150.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                    <div onclick="selectService(this, 'Deep Relaxation (90 Menit)', '150.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-lg"><i class="fas fa-spa"></i></div>
                             <div>
@@ -449,7 +472,7 @@
                         </div>
                     </div>
                     <!-- Paket 3 -->
-                    <div onclick="selectService(this, '120 Menit', '200.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                    <div onclick="selectService(this, 'Total Restoration (120 Menit)', '200.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center text-lg"><i class="fas fa-battery-full"></i></div>
                             <div>
@@ -470,7 +493,7 @@
                     </div>
 
                     <!-- Paket Couple 60 Menit -->
-                    <div onclick="selectService(this, 'Paket Suami Istri 60 Menit', '200.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-pink-100 flex items-center justify-between">
+                    <div onclick="selectService(this, 'Couple Express (60 Menit)', '200.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-pink-100 flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-pink-50 text-pink-500 flex items-center justify-center text-lg"><i class="fas fa-user-friends"></i></div>
                             <div>
@@ -486,7 +509,7 @@
                     </div>
 
                     <!-- Paket Couple 90 Menit -->
-                    <div onclick="selectService(this, 'Paket Suami Istri 90 Menit', '300.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-pink-100 flex items-center justify-between">
+                    <div onclick="selectService(this, 'Couple Deep Relax (90 Menit)', '300.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-pink-100 flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-pink-50 text-pink-500 flex items-center justify-center text-lg"><i class="fas fa-heart"></i></div>
                             <div>
@@ -502,7 +525,7 @@
                     </div>
 
                     <!-- Paket Couple 120 Menit -->
-                    <div onclick="selectService(this, 'Paket Suami Istri 120 Menit', '400.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-pink-100 flex items-center justify-between">
+                    <div onclick="selectService(this, 'Couple Restoration (120 Menit)', '400.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-pink-100 flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-pink-50 text-pink-500 flex items-center justify-center text-lg"><i class="fas fa-gem"></i></div>
                             <div>
@@ -524,7 +547,7 @@
                     </div>
 
                     <!-- Tambahan 1: Totok Wajah -->
-                    <div onclick="selectService(this, 'Totok Wajah + Kepala', '45.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-teal-100 flex items-center justify-between">
+                    <div onclick="selectService(this, 'Totok Wajah + Kepala', '40.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-teal-100 flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-teal-50 text-teal-500 flex items-center justify-center text-lg"><i class="fas fa-smile"></i></div>
                             <div>
@@ -534,7 +557,7 @@
                             </div>
                         </div>
                         <div class="text-right shrink-0">
-                            <span class="block font-bold text-gojek-black text-sm">45K</span>
+                            <span class="block font-bold text-gojek-black text-sm">40K</span>
                             <button type="button" class="text-[10px] font-bold text-gojek-green mt-1">TAMBAH</button>
                         </div>
                     </div>
@@ -560,15 +583,13 @@
                 <div class="bg-white rounded-3xl shadow-app-hover border border-app-border p-5 mt-2">
                     <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3"><h3 class="font-heading font-bold text-base">Detail Pesanan</h3><span class="selected-label text-[10px] font-bold bg-gray-100 text-gray-400 px-3 py-1 rounded-full">Pilih paket dahulu</span></div>
                     <form onsubmit="kirimPesan(event, 'Go Massage')" class="space-y-3">
-                        <input type="hidden" class="service_name"><input type="hidden" class="service_price">
-                        
-                        <!-- Pilihan Terapis (3 OPSI SAJA) -->
+                        <!-- Pilihan Terapis -->
                         <div class="input-group">
                             <div class="input-icon"><i class="fas fa-user-nurse"></i></div>
                             <select required class="app-input terapis appearance-none">
                                 <option value="" disabled selected>Pilih Jenis Terapis</option>
                                 <option value="1 Terapis Pria">1 Terapis Pria</option>
-                                <option value="1 Terapis Wanita">1 Terapis Wanita</option>
+                                <option value="1 Terapis Wanita (Khusus Pelanggan Wanita)">1 Terapis Wanita (Khusus Pelanggan Wanita)</option>
                                 <option value="Paket Couple (1 Terapis Pria & 1 Terapis Wanita)">Paket Couple (1 Terapis Pria & 1 Terapis Wanita)</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
@@ -600,7 +621,7 @@
             <div class="flex flex-col gap-6">
                 <div class="space-y-4">
                     <!-- Reiki 1 -->
-                    <div onclick="selectService(this, 'Reiki Massage 60 Menit', '150.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                    <div onclick="selectService(this, 'Basic Healing (60 Menit)', '150.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-yellow-100 text-reiki-gold flex items-center justify-center text-lg"><i class="fas fa-leaf"></i></div>
                             <div>
@@ -615,7 +636,7 @@
                         </div>
                     </div>
                     <!-- Reiki 2 -->
-                    <div onclick="selectService(this, 'Reiki Massage 90 Menit', '200.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                    <div onclick="selectService(this, 'Deep Healing (90 Menit)', '200.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-yellow-100 text-reiki-gold flex items-center justify-center text-lg"><i class="fas fa-yin-yang"></i></div>
                             <div>
@@ -630,7 +651,7 @@
                         </div>
                     </div>
                     <!-- Reiki 3 -->
-                    <div onclick="selectService(this, 'Reiki Massage 120 Menit', '250.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
+                    <div onclick="selectService(this, 'Ultimate Healing (120 Menit)', '250.000', 'gold')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-app-border flex items-center justify-between">
                         <div class="flex items-center gap-4 w-[75%]">
                             <div class="w-12 h-12 shrink-0 rounded-full bg-yellow-100 text-reiki-gold flex items-center justify-center text-lg"><i class="fas fa-gem"></i></div>
                             <div>
@@ -649,15 +670,13 @@
                 <div class="bg-white rounded-3xl shadow-app-hover border border-yellow-200 p-5">
                     <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3"><h3 class="font-heading font-bold text-base text-reiki-gold">Detail Pesanan</h3><span class="selected-label text-[10px] font-bold bg-yellow-50 text-reiki-gold px-3 py-1 rounded-full">Pilih paket dahulu</span></div>
                     <form onsubmit="kirimPesan(event, 'Reiki Massage Premium')" class="space-y-3">
-                        <input type="hidden" class="service_name"><input type="hidden" class="service_price">
-                        
                         <!-- Pilihan Terapis -->
                         <div class="input-group">
                             <div class="input-icon"><i class="fas fa-user-nurse"></i></div>
                             <select required class="app-input terapis appearance-none">
                                 <option value="" disabled selected>Pilih Jenis Terapis</option>
                                 <option value="1 Terapis Pria">1 Terapis Pria</option>
-                                <option value="1 Terapis Wanita">1 Terapis Wanita</option>
+                                <option value="1 Terapis Wanita (Khusus Pelanggan Wanita)">1 Terapis Wanita (Khusus Pelanggan Wanita)</option>
                                 <option value="Paket Couple (1 Terapis Pria & 1 Terapis Wanita)">Paket Couple (1 Terapis Pria & 1 Terapis Wanita)</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
@@ -976,18 +995,13 @@
                 let names = [];
                 let total = 0;
 
-                // Hitung total dari seluruh layanan yang dipilih di tab ini
+                // Hitung total
                 parent.querySelectorAll('.service-card.' + selectedClass).forEach(card => {
                     names.push(card.getAttribute('data-selected-name'));
                     total += parseInt(card.getAttribute('data-selected-price'));
                 });
 
-                // Gabungkan nama layanan dan format penulisan harga
-                formContainer.querySelector('.service_name').value = names.join(' + ');
-                let totalStr = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "Math.floor");
-                formContainer.querySelector('.service_price').value = totalStr;
-
-                // Perbarui Label di UI
+                // Update UI Label (Kecil di sebelah judul "Detail Pesanan")
                 const label = formContainer.parentElement.querySelector('.selected-label');
                 if (names.length > 0) {
                     label.textContent = names.length > 1 ? names.length + " Layanan Terpilih" : names[0];
@@ -1001,22 +1015,34 @@
         }
 
         // ==========================================
-        // FITUR INVOICE KIRIM LANGSUNG KE WHATSAPP
+        // FITUR INVOICE KIRIM LANGSUNG KE WHATSAPP (LOGIKA BARU)
         // ==========================================
         let currentOrderData = {}; 
 
         function kirimPesan(e, category) {
             e.preventDefault();
             const form = e.target;
-            const service = form.querySelector('.service_name').value;
-            const price = form.querySelector('.service_price').value;
+            const tabContent = form.closest('.tab-content');
             
-            if(!service) { 
-                alert("Mohon pilih minimal satu paket layanan terlebih dahulu di bagian atas."); 
+            // Ambil semua elemen card yang memiliki class selected
+            const selectedCards = tabContent.querySelectorAll('.service-card.selected-green, .service-card.selected-gold');
+
+            if(selectedCards.length === 0) { 
+                alert("Mohon pilih minimal satu paket layanan terlebih dahulu di bagian atas form pemesanan."); 
                 return; 
             }
+
+            // Kumpulkan array item dan hitung total
+            let items = [];
+            let total = 0;
+            selectedCards.forEach(card => {
+                let name = card.getAttribute('data-selected-name');
+                let price = parseInt(card.getAttribute('data-selected-price'));
+                items.push({ name, price });
+                total += price;
+            });
             
-            // Ambil data dari isian form
+            // Ambil data dari isian form teks
             const nama = form.querySelector('.nama').value;
             const tanggal = form.querySelector('.tanggal').value;
             const jam = form.querySelector('.jam').value;
@@ -1024,25 +1050,42 @@
             const wa = form.querySelector('.whatsapp').value;
             const alamat = form.querySelector('.alamat').value;
             const note = form.querySelector('.keluhan').value || '-';
+            const totalStr = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             
-            // Generate Nomor ID Pesanan (Contoh: RHM-20240404-1234)
+            // Generate Nomor ID Pesanan (Contoh: INV-20240404-1234)
             const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
             const randomNum = Math.floor(1000 + Math.random() * 9000);
-            const orderId = `RHM-${dateStr}-${randomNum}`;
+            const orderId = `INV-${dateStr}-${randomNum}`;
 
-            currentOrderData = { orderId, category, service, price, tanggal, jam, terapis, nama, wa, alamat, note };
+            // Simpan ke Object Global
+            currentOrderData = { orderId, category, items, totalStr, tanggal, jam, terapis, nama, wa, alamat, note };
 
-            // Render informasi ke Tampilan UI (Pop-up E-Invoice)
+            // ==========================
+            // RENDER KE TAMPILAN INVOICE
+            // ==========================
             document.getElementById('inv-no').innerText = orderId;
             document.getElementById('inv-date').innerText = tanggal;
-            document.getElementById('inv-time').innerText = jam;
+            document.getElementById('inv-time').innerText = jam + ' WIB';
             document.getElementById('inv-therapist').innerText = terapis;
             document.getElementById('inv-name').innerText = nama;
+            document.getElementById('inv-phone').innerText = wa;
             document.getElementById('inv-address').innerText = alamat;
-            document.getElementById('inv-category').innerText = category;
-            document.getElementById('inv-service').innerText = service;
-            document.getElementById('inv-price').innerText = 'Rp ' + price;
-            document.getElementById('inv-total').innerText = 'Rp ' + price;
+
+            // Render Rincian Item secara Dinamis (Tabel)
+            const itemList = document.getElementById('inv-item-list');
+            itemList.innerHTML = ''; // Kosongkan list
+            items.forEach(item => {
+                const priceFormatted = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                itemList.innerHTML += `
+                    <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-0 last:pb-0">
+                        <span class="text-[11px] font-bold text-gray-700 w-2/3 pr-2 leading-tight">${item.name}</span>
+                        <span class="text-xs font-bold text-gray-800">Rp ${priceFormatted}</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('inv-subtotal').innerText = 'Rp ' + totalStr;
+            document.getElementById('inv-total').innerText = 'Rp ' + totalStr;
 
             // Tampilkan Modal Invoice
             const modal = document.getElementById('invoice-modal');
@@ -1056,44 +1099,68 @@
             modal.classList.add('modal-hidden');
         }
 
+        // FUNGSI UNDUH INVOICE (Diperbaiki agar tertangkap sempurna)
         function downloadInvoice() {
+            const modalContainer = document.getElementById('invoice-container');
             const invoiceElement = document.getElementById('invoice-content');
-            html2canvas(invoiceElement, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Invoice_${currentOrderData.orderId}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
+            
+            const originalMaxHeight = modalContainer.style.maxHeight;
+            const originalOverflow = invoiceElement.style.overflowY;
+            
+            modalContainer.style.maxHeight = 'none';
+            invoiceElement.style.overflowY = 'visible';
+
+            setTimeout(() => {
+                html2canvas(invoiceElement, { 
+                    scale: 2, 
+                    backgroundColor: "#ffffff"
+                }).then(canvas => {
+                    modalContainer.style.maxHeight = originalMaxHeight || '';
+                    invoiceElement.style.overflowY = originalOverflow || '';
+
+                    const link = document.createElement('a');
+                    link.download = `Invoice_${currentOrderData.orderId}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            }, 100);
         }
 
-        // FUNGSI UTAMA: MENGIRIM TEKS INVOICE KE WHATSAPP DENGAN FORMAT PROFESIONAL
+        // FUNGSI MENGIRIM PESAN INVOICE KE WHATSAPP (Sangat Rapi)
         function lanjutWA() {
             const d = currentOrderData;
             
-            // Format pesan WhatsApp agar menyerupai struk/invoice fisik yang rapi
+            // Bangun daftar string item per item
+            let itemsText = '';
+            d.items.forEach((item, index) => {
+                const priceFormatted = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                itemsText += `  ${index+1}. ${item.name} (Rp ${priceFormatted})\n`;
+            });
+
             const waText = `==========================
 🧾 *E-INVOICE PEMESANAN*
 ==========================
-*RENSHI HOLISTIC MASSAGE*
-No. Pesanan : ${d.orderId}
-Tanggal     : ${d.tanggal}
+*RENSHI HOLISTIC*
+No. Order : ${d.orderId}
+Tanggal   : ${d.tanggal}
 
-*👤 DATA PELANGGAN*
+*👤 DATA PASIEN*
 Nama   : ${d.nama}
 No. WA : ${d.wa}
 Alamat : ${d.alamat}
 
-*📦 RINCIAN LAYANAN*
-Kategori  : ${d.category}
-Layanan   : ${d.service}
-Terapis   : ${d.terapis}
-Jadwal    : ${d.tanggal} pukul ${d.jam}
-Catatan   : ${d.note}
+*🔰 RINCIAN LAYANAN*
+Kategori : ${d.category}
+Item Terpilih :
+${itemsText}
+Terapis  : ${d.terapis}
+Jadwal   : ${d.tanggal} (Pukul ${d.jam})
+Catatan  : ${d.note}
 
-*💰 TOTAL ESTIMASI*
-*Rp ${d.price}*
+*💰 TOTAL TAGIHAN*
+*Rp ${d.totalStr}*
 ==========================
-_Mohon konfirmasi ketersediaan jadwal untuk pesanan saya di atas. Terima kasih._`;
+_Mohon konfirmasi ketersediaan jadwal. Terima kasih._`;
 
             window.open(`https://wa.me/62895394005555?text=${encodeURIComponent(waText)}`, '_blank');
         }
@@ -1241,4 +1308,4 @@ _Mohon konfirmasi ketersediaan jadwal untuk pesanan saya di atas. Terima kasih._
 
     </script>
 </body>
-                            </html>
+    </html>
