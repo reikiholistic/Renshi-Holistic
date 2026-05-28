@@ -138,6 +138,12 @@
 
         /* Dot Divider for Invoice */
         .invoice-divider { border-top: 2px dashed #e5e7eb; margin: 16px 0; }
+
+        /* Accordion CSS for Drawer */
+        .accordion-content { transition: max-height 0.3s ease-in-out, padding 0.3s ease; max-height: 0; overflow: hidden; padding-top: 0; padding-bottom: 0; opacity: 0; }
+        .accordion-content.open { max-height: 1000px; padding-top: 1rem; padding-bottom: 1rem; opacity: 1; }
+        .accordion-icon { transition: transform 0.3s ease; }
+        .accordion-icon.rotate { transform: rotate(180deg); }
     </style>
 </head>
 <body class="antialiased pb-24 md:pb-0 bg-gray-50">
@@ -149,25 +155,84 @@
             <h3 class="font-heading font-bold text-xl">Informasi Layanan</h3>
             <button onclick="toggleDrawer()" class="text-gray-500 hover:text-red-500"><i class="fas fa-times text-2xl"></i></button>
         </div>
-        <div class="space-y-6">
-            <!-- INFO RENSHI HOLISTIC MASSAGE -->
-            <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 p-4 rounded-xl shadow-sm">
-                <h4 class="font-heading font-bold text-gojek-green flex items-center gap-2 mb-2"><i class="fas fa-spa"></i> RENSHI HOLISTIC MASSAGE</h4>
-                <p class="text-xs text-gray-700 leading-relaxed text-justify italic">"Sebuah pusat terapi pijat yang dikelola oleh para pakar (Master/Renshi) bersertifikat, yang mendedikasikan diri untuk memberikan penyembuhan berkualitas tinggi secara menyeluruh (Holistik)—memulihkan fisik dari keletihan, menenangkan pikiran dari stres, dan menyeimbangkan kembali energi kehidupan pasien."</p>
+        
+        <!-- Accordion Menu System -->
+        <div class="space-y-3">
+            
+            <!-- Accordion 1: Profil Terapis (MENU BARU) -->
+            <div class="border border-blue-100 rounded-xl overflow-hidden bg-white shadow-sm">
+                <button onclick="toggleAccordion('acc-terapis')" class="w-full flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 font-heading font-bold text-sm">
+                    <span class="flex items-center gap-2"><i class="fas fa-id-badge"></i> Profil Terapis</span>
+                    <i class="fas fa-chevron-down accordion-icon" id="icon-terapis"></i>
+                </button>
+                <div id="acc-terapis" class="accordion-content px-4 bg-white space-y-4">
+                    <!-- Master Jois -->
+                    <div class="border border-gray-100 rounded-xl p-3 bg-gray-50 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-blue-500 text-white text-[9px] font-bold px-2 py-1 rounded-bl-lg shadow-sm">Pria</div>
+                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-2 mb-1"><i class="fas fa-user-tie text-blue-600"></i> Master Jois</h4>
+                        <p class="text-[10px] font-bold text-reiki-gold mb-3 bg-yellow-50 inline-block px-2 py-1 rounded-md border border-yellow-100">Pencipta Teknik Reiki Massage</p>
+                        <div class="mt-2">
+                            <p class="text-[10px] text-gray-500 mb-1 font-semibold"><i class="fas fa-certificate text-gray-400"></i> Sertifikat & Lisensi:</p>
+                            <img src="https://www.dropbox.com/scl/fi/5hmsxmjz0frfgpwejhll5/59.-Vicki-Jois-Saputra-1-.pdf_20260524_094452_0000.png?rlkey=2wnychkwy9r8d4jhvs4c6cwxe&st=uo4tg2np&raw=1" alt="Sertifikat Master Jois" class="w-full h-28 object-cover rounded-lg border border-gray-200">
+                        </div>
+                    </div>
+                    <!-- Senior Dewi -->
+                    <div class="border border-gray-100 rounded-xl p-3 bg-gray-50 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-pink-500 text-white text-[9px] font-bold px-2 py-1 rounded-bl-lg shadow-sm">Wanita</div>
+                        <h4 class="font-bold text-sm text-gray-800 flex items-center gap-2 mb-1"><i class="fas fa-user-nurse text-pink-500"></i> Senior Dewi</h4>
+                        <p class="text-[10px] font-bold text-pink-500 mb-3 bg-pink-50 inline-block px-2 py-1 rounded-md border border-pink-100">Terapis Senior Tersertifikasi</p>
+                        <div class="mt-2">
+                            <p class="text-[10px] text-gray-500 mb-1 font-semibold"><i class="fas fa-certificate text-gray-400"></i> Sertifikat & Lisensi:</p>
+                            <img src="https://www.dropbox.com/scl/fi/1wavfdcoygejz0a868zt6/1_20260528_083556_0000.png?rlkey=h3c7jukrphbtw4pzzr8wgp7fh&st=vlizn19n&raw=1" alt="Sertifikat Senior Dewi" class="w-full h-28 object-cover rounded-lg border border-gray-200">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="border-b border-gray-100 pb-4">
-                <h4 class="font-bold text-indigo-700 flex items-center gap-2 mb-2"><i class="fas fa-hand-sparkles"></i> Terapi Reiki</h4>
-                <p class="text-sm text-gray-600 leading-relaxed text-justify">Terapi penyaluran energi alam semesta murni tanpa sentuhan pijat fisik. Berfokus pada penyeimbangan chakra, pembersihan aura, dan penyembuhan mental (stres, trauma, kecemasan) serta pemulihan organ dalam. Dapat dilakukan secara jarak jauh.</p>
+            <!-- Accordion 2: INFO RENSHI HOLISTIC MASSAGE -->
+            <div class="border border-green-100 rounded-xl overflow-hidden bg-white shadow-sm">
+                <button onclick="toggleAccordion('acc-renshi')" class="w-full flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 text-gojek-green font-heading font-bold text-sm">
+                    <span class="flex items-center gap-2"><i class="fas fa-spa"></i> Tentang Kami</span>
+                    <i class="fas fa-chevron-down accordion-icon" id="icon-renshi"></i>
+                </button>
+                <div id="acc-renshi" class="accordion-content px-4 text-xs text-gray-700 leading-relaxed text-justify italic bg-white">
+                    "Sebuah pusat terapi pijat yang dikelola oleh para pakar (Master/Renshi) bersertifikat, yang mendedikasikan diri untuk memberikan penyembuhan berkualitas tinggi secara menyeluruh (Holistik)—memulihkan fisik dari keletihan, menenangkan pikiran dari stres, dan menyeimbangkan kembali energi kehidupan pasien."
+                </div>
             </div>
-            <div class="border-b border-gray-100 pb-4">
-                <h4 class="font-bold text-reiki-gold flex items-center gap-2 mb-2"><i class="fas fa-crown"></i> Reiki Massage</h4>
-                <p class="text-sm text-gray-600 leading-relaxed text-justify">Kombinasi eksklusif teknik pijat relaksasi dan penyaluran energi Reiki. Manfaat ganda: otot relaks & pikiran tenang. Merupakan layanan premium kami.</p>
+
+            <!-- Accordion 3: Terapi Reiki -->
+            <div class="border border-indigo-100 rounded-xl overflow-hidden bg-white shadow-sm">
+                <button onclick="toggleAccordion('acc-terapireiki')" class="w-full flex justify-between items-center p-4 bg-indigo-50 text-indigo-700 font-heading font-bold text-sm">
+                    <span class="flex items-center gap-2"><i class="fas fa-hand-sparkles"></i> Info Terapi Reiki</span>
+                    <i class="fas fa-chevron-down accordion-icon" id="icon-terapireiki"></i>
+                </button>
+                <div id="acc-terapireiki" class="accordion-content px-4 text-xs text-gray-600 leading-relaxed text-justify bg-white">
+                    Terapi penyaluran energi alam semesta murni tanpa sentuhan pijat fisik. Berfokus pada penyeimbangan chakra, pembersihan aura, dan penyembuhan mental (stres, trauma, kecemasan) serta pemulihan organ dalam. Dapat dilakukan secara jarak jauh.
+                </div>
             </div>
-            <div class="border-b border-gray-100 pb-4">
-                <h4 class="font-bold text-blue-600 flex items-center gap-2 mb-2"><i class="fas fa-users"></i> Kelas Gratis</h4>
-                <p class="text-sm text-gray-600 leading-relaxed text-justify">Edukasi penyembuhan mandiri untuk masyarakat luas. Pelajari teknik dasar pernapasan dan meditasi energi.</p>
+
+            <!-- Accordion 4: Reiki Massage -->
+            <div class="border border-yellow-100 rounded-xl overflow-hidden bg-white shadow-sm">
+                <button onclick="toggleAccordion('acc-reikimassage')" class="w-full flex justify-between items-center p-4 bg-yellow-50 text-reiki-gold font-heading font-bold text-sm">
+                    <span class="flex items-center gap-2"><i class="fas fa-crown"></i> Info Reiki Massage</span>
+                    <i class="fas fa-chevron-down accordion-icon" id="icon-reikimassage"></i>
+                </button>
+                <div id="acc-reikimassage" class="accordion-content px-4 text-xs text-gray-600 leading-relaxed text-justify bg-white">
+                    Kombinasi eksklusif teknik pijat relaksasi dan penyaluran energi Reiki. Manfaat ganda: otot relaks & pikiran tenang. Merupakan layanan premium kami.
+                </div>
             </div>
+
+            <!-- Accordion 5: Kelas Gratis -->
+            <div class="border border-blue-100 rounded-xl overflow-hidden bg-white shadow-sm">
+                <button onclick="toggleAccordion('acc-kelas')" class="w-full flex justify-between items-center p-4 bg-blue-50 text-blue-600 font-heading font-bold text-sm">
+                    <span class="flex items-center gap-2"><i class="fas fa-users"></i> Info Kelas Gratis</span>
+                    <i class="fas fa-chevron-down accordion-icon" id="icon-kelas"></i>
+                </button>
+                <div id="acc-kelas" class="accordion-content px-4 text-xs text-gray-600 leading-relaxed text-justify bg-white">
+                    Edukasi penyembuhan mandiri untuk masyarakat luas. Pelajari teknik dasar pernapasan dan meditasi energi.
+                </div>
+            </div>
+            
         </div>
     </div>
 
@@ -578,6 +643,22 @@
                         </div>
                     </div>
 
+                    <!-- Tambahan 3: Kerokan (MENU BARU) -->
+                    <div onclick="selectService(this, 'Kerokan', '30.000', 'green')" class="service-card cursor-pointer bg-white p-4 rounded-2xl shadow-app border border-orange-100 flex items-center justify-between">
+                        <div class="flex items-center gap-4 w-[75%]">
+                            <div class="w-12 h-12 shrink-0 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-lg"><i class="fas fa-coins"></i></div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Kerokan</h3>
+                                <p class="text-[11px] text-gray-500">15-20 Menit • Usir Masuk Angin</p>
+                                <p class="text-[10px] text-gray-500 mt-0.5 leading-snug pr-2"><span class="font-bold text-gojek-green">Manfaat:</span> Melancarkan sirkulasi darah di permukaan kulit dan meringankan gejala masuk angin serta pegal linu.</p>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <span class="block font-bold text-gojek-black text-sm">30K</span>
+                            <button type="button" class="text-[10px] font-bold text-gojek-green mt-1">TAMBAH</button>
+                        </div>
+                    </div>
+
                 </div>
                 
                 <div class="bg-white rounded-3xl shadow-app-hover border border-app-border p-5 mt-2">
@@ -588,8 +669,8 @@
                             <div class="input-icon"><i class="fas fa-user-nurse"></i></div>
                             <select required class="app-input terapis appearance-none">
                                 <option value="" disabled selected>Pilih Jenis Terapis</option>
-                                <option value="1 Terapis Pria">1 Terapis Pria</option>
-                                <option value="1 Terapis Wanita (Khusus Pelanggan Wanita)">1 Terapis Wanita (Khusus Pelanggan Wanita)</option>
+                                <option value="1 Terapis Pria (Master Jois)">1 Terapis Pria (Master Jois)</option>
+                                <option value="1 Terapis Wanita (Senior Dewi)">1 Terapis Wanita (Senior Dewi)</option>
                                 <option value="Paket Couple (1 Terapis Pria & 1 Terapis Wanita)">Paket Couple (1 Terapis Pria & 1 Terapis Wanita)</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
@@ -604,7 +685,7 @@
                         <div class="input-group"><div class="input-icon"><i class="fas fa-user"></i></div><input type="text" placeholder="Nama Lengkap (1 Nama Saja)" required class="app-input nama"></div>
                         <div class="input-group"><div class="input-icon"><i class="fab fa-whatsapp"></i></div><input type="tel" placeholder="Nomor WhatsApp" required class="app-input whatsapp"></div>
                         <div class="input-group"><div class="input-icon"><i class="fas fa-map-marker-alt"></i></div><input type="text" placeholder="Alamat Lengkap" required class="app-input alamat"></div>
-                        <div class="input-group"><div class="input-icon"><i class="fas fa-sticky-note"></i></div><input type="text" placeholder="Catatan Tambahan (Opsional)" class="app-input keluhan"></div>
+                        <div class="input-group"><div class="input-icon"><i class="fas fa-sticky-note"></i></div><input type="text" placeholder="Catatan Keluhan (Opsional)" class="app-input keluhan"></div>
                         <button type="submit" class="w-full bg-gojek-green text-white font-bold py-3 rounded-xl shadow-md text-sm hover:bg-gojek-dark transition">Pesan Sekarang</button>
                     </form>
                 </div>
@@ -675,8 +756,8 @@
                             <div class="input-icon"><i class="fas fa-user-nurse"></i></div>
                             <select required class="app-input terapis appearance-none">
                                 <option value="" disabled selected>Pilih Jenis Terapis</option>
-                                <option value="1 Terapis Pria">1 Terapis Pria</option>
-                                <option value="1 Terapis Wanita (Khusus Pelanggan Wanita)">1 Terapis Wanita (Khusus Pelanggan Wanita)</option>
+                                <option value="1 Terapis Pria (Master Jois)">1 Terapis Pria (Master Jois)</option>
+                                <option value="1 Terapis Wanita (Senior Dewi)">1 Terapis Wanita (Senior Dewi)</option>
                                 <option value="Paket Couple (1 Terapis Pria & 1 Terapis Wanita)">Paket Couple (1 Terapis Pria & 1 Terapis Wanita)</option>
                             </select>
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
@@ -1015,7 +1096,7 @@
         }
 
         // ==========================================
-        // FITUR INVOICE KIRIM LANGSUNG KE WHATSAPP (LOGIKA BARU)
+        // FITUR INVOICE KIRIM LANGSUNG KE WHATSAPP
         // ==========================================
         let currentOrderData = {}; 
 
@@ -1052,7 +1133,7 @@
             const note = form.querySelector('.keluhan').value || '-';
             const totalStr = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             
-            // Generate Nomor ID Pesanan (Contoh: INV-20240404-1234)
+            // Generate Nomor ID Pesanan
             const dateStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
             const randomNum = Math.floor(1000 + Math.random() * 9000);
             const orderId = `INV-${dateStr}-${randomNum}`;
@@ -1060,9 +1141,7 @@
             // Simpan ke Object Global
             currentOrderData = { orderId, category, items, totalStr, tanggal, jam, terapis, nama, wa, alamat, note };
 
-            // ==========================
-            // RENDER KE TAMPILAN INVOICE
-            // ==========================
+            // Render ke Modal Invoice
             document.getElementById('inv-no').innerText = orderId;
             document.getElementById('inv-date').innerText = tanggal;
             document.getElementById('inv-time').innerText = jam + ' WIB';
@@ -1071,9 +1150,8 @@
             document.getElementById('inv-phone').innerText = wa;
             document.getElementById('inv-address').innerText = alamat;
 
-            // Render Rincian Item secara Dinamis (Tabel)
             const itemList = document.getElementById('inv-item-list');
-            itemList.innerHTML = ''; // Kosongkan list
+            itemList.innerHTML = '';
             items.forEach(item => {
                 const priceFormatted = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 itemList.innerHTML += `
@@ -1087,7 +1165,6 @@
             document.getElementById('inv-subtotal').innerText = 'Rp ' + totalStr;
             document.getElementById('inv-total').innerText = 'Rp ' + totalStr;
 
-            // Tampilkan Modal Invoice
             const modal = document.getElementById('invoice-modal');
             modal.classList.remove('modal-hidden');
             modal.classList.add('modal-visible');
@@ -1099,7 +1176,6 @@
             modal.classList.add('modal-hidden');
         }
 
-        // FUNGSI UNDUH INVOICE (Diperbaiki agar tertangkap sempurna)
         function downloadInvoice() {
             const modalContainer = document.getElementById('invoice-container');
             const invoiceElement = document.getElementById('invoice-content');
@@ -1126,11 +1202,8 @@
             }, 100);
         }
 
-        // FUNGSI MENGIRIM PESAN INVOICE KE WHATSAPP (Sangat Rapi)
         function lanjutWA() {
             const d = currentOrderData;
-            
-            // Bangun daftar string item per item
             let itemsText = '';
             d.items.forEach((item, index) => {
                 const priceFormatted = item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -1139,11 +1212,11 @@
 
             const waText = `==========================
 🧾 *E-INVOICE PEMESANAN*
-==========================
+*==========================*
 *RENSHI HOLISTIC*
-No. Order : ${d.orderId}
-Tanggal   : ${d.tanggal}
-
+_No. Order : ${d.orderId}_
+_Tanggal   : ${d.tanggal}_
+*==========================*
 *👤 DATA PASIEN*
 Nama   : ${d.nama}
 No. WA : ${d.wa}
@@ -1170,11 +1243,35 @@ _Mohon konfirmasi ketersediaan jadwal. Terima kasih._`;
             window.open(`https://wa.me/62895394005555?text=${message}`, '_blank');
         }
 
+        // ==========================================
+        // DRAWER & ACCORDION (MENU INFORMASI)
+        // ==========================================
         function toggleDrawer() {
             const drawer = document.getElementById('info-drawer');
             const overlay = document.getElementById('info-overlay');
-            if (drawer.classList.contains('drawer-closed')) { drawer.classList.remove('drawer-closed'); drawer.classList.add('drawer-open'); overlay.classList.remove('hidden'); } 
-            else { drawer.classList.remove('drawer-open'); drawer.classList.add('drawer-closed'); overlay.classList.add('hidden'); }
+            if (drawer.classList.contains('drawer-closed')) { 
+                drawer.classList.remove('drawer-closed'); 
+                drawer.classList.add('drawer-open'); 
+                overlay.classList.remove('hidden'); 
+            } 
+            else { 
+                drawer.classList.remove('drawer-open'); 
+                drawer.classList.add('drawer-closed'); 
+                overlay.classList.add('hidden'); 
+            }
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id.split('-')[1]);
+
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('rotate');
+            } else {
+                content.classList.add('open');
+                icon.classList.add('rotate');
+            }
         }
 
         // LOGIKA UNTUK MODAL PRODUK HERBAL
@@ -1194,9 +1291,7 @@ _Mohon konfirmasi ketersediaan jadwal. Terima kasih._`;
             modal.classList.add('hidden');
         }
 
-        // ==========================================
-        // 1. KALKULATOR BERAT IDEAL (BMI)
-        // ==========================================
+        // KALKULATOR BERAT IDEAL (BMI)
         const inputBB = document.getElementById('input-bb');
         const inputTB = document.getElementById('input-tb');
         const bmiValue = document.getElementById('bmi-value');
@@ -1231,9 +1326,7 @@ _Mohon konfirmasi ketersediaan jadwal. Terima kasih._`;
         inputBB.addEventListener('input', calculateBMI);
         inputTB.addEventListener('input', calculateBMI);
 
-        // ==========================================
-        // 2. TIPS KESEHATAN HARIAN
-        // ==========================================
+        // TIPS KESEHATAN HARIAN
         const tipsData = ["Minumlah segelas air hangat saat Anda baru bangun tidur.", "Lakukan pernapasan dalam (deep breathing) saat Anda sedang stres.", "Ganti camilan manis Anda dengan buah-buahan segar.", "Sempatkan berjalan kaki minimal 15 menit setiap harinya.", "Hindari menggunakan handphone 30 menit sebelum jadwal tidur Anda.", "Rendam kaki Anda dalam air hangat yang dicampur sedikit garam.", "Menjaga postur tubuh tetap tegak akan membantu kelancaran energi.", "Tertawa dapat membantu meningkatkan sistem imun tubuh Anda.", "Kurangi konsumsi gula berlebih untuk mendapatkan kulit yang lebih sehat.", "Lakukan peregangan otot ringan setiap 1 jam selama Anda bekerja."];
         function loadDailyTip() {
             const date = new Date();
@@ -1244,9 +1337,7 @@ _Mohon konfirmasi ketersediaan jadwal. Terima kasih._`;
         }
         document.addEventListener('DOMContentLoaded', loadDailyTip);
 
-        // ==========================================
-        // 3. FITUR PENCOCOKAN KESEHATAN
-        // ==========================================
+        // FITUR PENCOCOKAN KESEHATAN
         function checkSymptom(type) {
             const resultBox = document.getElementById('symptom-result');
             resultBox.classList.remove('hidden');
@@ -1275,9 +1366,7 @@ _Mohon konfirmasi ketersediaan jadwal. Terima kasih._`;
             runCycle(); breathingInterval = setInterval(runCycle, 19000);
         }
 
-        // ==========================================
-        // 4. LOGIKA PEMUTAR AUDIO (ZONA RELAKSASI)
-        // ==========================================
+        // LOGIKA PEMUTAR AUDIO (ZONA RELAKSASI)
         const audioPlayer = document.getElementById('audio-player');
         const visualizer = document.getElementById('visualizer');
         const audioTitle = document.getElementById('audio-title');
